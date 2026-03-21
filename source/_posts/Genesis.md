@@ -7,7 +7,7 @@ tags:
   - ACG
   - 纪念
 categories: Setup踩坑实录
-cover: /img/bg/genesis-cover.jpg
+cover: /img/bg/genesis-cover.webp
 sticky: 100
 abbrlink: c0f17792
 date: 2026-03-22 10:00:00

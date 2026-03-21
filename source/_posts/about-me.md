@@ -1,7 +1,7 @@
 ---
 title: 'About: 欢迎来到 Arturia 的数字领地'
 sticky: 999
-cover: /img/bg/about-cover.jpg
+cover: /img/bg/about-cover.webp
 abbrlink: f348f991
 date: 2026-03-20 12:00:00
 ---
