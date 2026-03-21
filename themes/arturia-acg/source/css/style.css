@@ -2390,3 +2390,244 @@ body {
     -webkit-overflow-scrolling: touch;
   }
 }
+
+/* =========================================
+   Arturia 极客代码控制台：终极稳定版
+   ========================================= */
+
+figure.highlight {
+  position: relative;
+  margin: 18px 0;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 14px;
+  overflow: hidden;
+  background: linear-gradient(180deg, #121726 0%, #0d1320 100%);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.38);
+}
+
+figure.highlight .code-console-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-height: 40px;
+  padding: 0 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(10px);
+}
+
+.code-console-left {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.code-console-dots {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.code-console-dots div {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.code-console-dots div:nth-child(1) { background: #ff5f57; }
+.code-console-dots div:nth-child(2) { background: #febc2e; }
+.code-console-dots div:nth-child(3) { background: #28c840; }
+
+.code-language-tag {
+  font-size: 12px;
+  line-height: 1;
+  letter-spacing: 0.4px;
+  color: rgba(226, 232, 240, 0.9);
+  background: rgba(136, 192, 208, 0.16);
+  border: 1px solid rgba(136, 192, 208, 0.36);
+  border-radius: 999px;
+  padding: 5px 10px;
+  max-width: 180px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.code-copy-btn {
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.08);
+  color: #dbe7ff;
+  font-size: 12px;
+  border-radius: 999px;
+  padding: 5px 12px;
+  cursor: pointer;
+  transition: all 0.22s ease;
+  flex-shrink: 0;
+}
+
+.code-copy-btn:hover {
+  background: rgba(86, 243, 255, 0.18);
+  border-color: rgba(86, 243, 255, 0.65);
+  color: #ffffff;
+}
+
+figure.highlight table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  margin: 0;
+}
+
+figure.highlight td {
+  padding: 0;
+  vertical-align: top;
+  border: none;
+}
+
+figure.highlight td.gutter {
+  width: 44px;
+  background: rgba(255, 255, 255, 0.03);
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.45);
+  user-select: none;
+  overflow-x: hidden;
+}
+
+figure.highlight td.gutter pre {
+  margin: 0;
+  padding: 14px 8px 14px 12px;
+  line-height: 1.7;
+  font-size: 12px;
+  font-family: "JetBrains Mono", "Fira Code", monospace;
+  overflow: visible;
+  background: transparent;
+}
+
+figure.highlight td.code {
+  width: calc(100% - 44px);
+  overflow-x: auto;
+}
+
+figure.highlight td.code pre {
+  margin: 0;
+  padding: 14px 16px;
+  line-height: 1.7;
+  font-size: 13px;
+  font-family: "JetBrains Mono", "Fira Code", monospace;
+  background: transparent;
+  overflow: visible;
+  white-space: pre;
+}
+
+figure.highlight td.code pre code {
+  display: block;
+  min-width: max-content;
+}
+
+figure.highlight td.code::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+
+figure.highlight td.code::-webkit-scrollbar-track,
+figure.highlight td.code::-webkit-scrollbar-corner,
+figure.highlight td.code::-webkit-scrollbar-button {
+  display: none;
+  background: transparent;
+  width: 0;
+  height: 0;
+}
+
+figure.highlight td.code::-webkit-scrollbar-thumb {
+  background-color: rgba(136, 192, 208, 0.4);
+  border-radius: 99px;
+  border: 2px solid #121726;
+  background-clip: padding-box;
+}
+
+figure.highlight td.code::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(136, 192, 208, 0.8);
+}
+
+figure.highlight td.code::-webkit-scrollbar-thumb:active {
+  background-color: #56f3ff;
+}
+
+figure.highlight .code pre { color: #abb2bf; }
+figure.highlight .keyword,
+figure.highlight .selector-tag,
+figure.highlight .literal,
+figure.highlight .section,
+figure.highlight .link { color: #c678dd; }
+
+figure.highlight .string,
+figure.highlight .symbol,
+figure.highlight .bullet,
+figure.highlight .addition { color: #98c379; }
+
+figure.highlight .comment,
+figure.highlight .quote,
+figure.highlight .deletion {
+  color: #5c6370;
+  font-style: italic;
+}
+
+figure.highlight .title,
+figure.highlight .name { color: #e06c75; }
+
+figure.highlight .variable,
+figure.highlight .template-variable,
+figure.highlight .attribute,
+figure.highlight .number { color: #d19a66; }
+
+figure.highlight .built_in,
+figure.highlight .type,
+figure.highlight .params,
+figure.highlight .attr { color: #e5c07b; }
+
+figure.highlight .function,
+figure.highlight .title.function_,
+figure.highlight .class .title { color: #61afef; }
+
+@media (max-width: 768px) {
+  figure.highlight {
+    border-radius: 12px;
+  }
+
+  figure.highlight .code-console-header {
+    min-height: 38px;
+    padding: 0 10px;
+  }
+
+  .code-language-tag {
+    max-width: 120px;
+    font-size: 11px;
+    padding: 4px 8px;
+  }
+
+  .code-copy-btn {
+    font-size: 11px;
+    padding: 4px 9px;
+  }
+
+  figure.highlight td.gutter {
+    width: 40px;
+  }
+
+  figure.highlight td.code {
+    width: calc(100% - 40px);
+  }
+
+  figure.highlight td.gutter pre {
+    padding: 12px 6px 12px 10px;
+    font-size: 11px;
+  }
+
+  figure.highlight td.code pre {
+    padding: 12px;
+    font-size: 12px;
+  }
+}
