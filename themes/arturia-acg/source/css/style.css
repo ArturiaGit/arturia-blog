@@ -2173,3 +2173,129 @@ body {
   background: linear-gradient(to right, transparent, rgba(136, 192, 208, 0.5), transparent);
   margin: 2em 0;
 }
+
+/* =========================================
+   移动端全息兼容化重构 (Responsive Typography & Layout)
+   ========================================= */
+@media (max-width: 768px) {
+  /* 1. 标题与字体全局压榨：在亮色/暗色背景下保持可读性 */
+  body {
+    font-size: 15px; /* 全局字号稍微收缩，提升移动端精致感 */
+  }
+
+  /* 2. 导航栏重排：从 Space-between 改为 Center 堆叠 */
+  .nav-inner {
+    flex-direction: column !important; /* 强制垂直堆叠 */
+    gap: 12px !important;
+    padding: 15px 10px !important;
+    align-items: center !important;
+  }
+
+  .logo {
+    font-size: 20px !important;
+    margin-bottom: 5px !important;
+  }
+
+  .nav-menu {
+    flex-wrap: wrap !important; /* 允许菜单项换行 */
+    justify-content: center !important; /* 菜单项在中间汇合 */
+    gap: 8px !important;
+    padding: 0 !important;
+  }
+
+  .nav-menu a {
+    padding: 6px 10px !important;
+    font-size: 13px !important;
+    gap: 6px !important;
+  }
+
+  .nav-icon {
+    width: 28px !important;
+    height: 28px !important;
+    font-size: 12px !important;
+  }
+
+  /* 3. Hero 区域：压榨 Epiphany Slogan 体积 */
+  .hero-slogan .typewriter {
+    font-size: clamp(20px, 6vw, 40px) !important; /* 核心维持史诗感，但限制最大体积 */
+    letter-spacing: 2px !important; /* 缩小字距，防止溢出 */
+  }
+
+  /* 4. 主布局重构：Content 与 Sidebar 的垂直生命周期 */
+  .layout-shell {
+    flex-direction: column !important; /* 强制双栏垂直堆叠 */
+    gap: 20px !important;
+    padding: 20px 10px !important;
+  }
+
+  .content-area,
+  .sidebar-area {
+    flex: 1 1 auto !important; /* 允许两个区域各占满宽度 */
+    width: 100% !important;
+  }
+
+  /* 5. 首页卡片重构：横向 -> 纵向 (核心防御) */
+  .post-list {
+    gap: 18px !important;
+  }
+
+  .post-card-horizontal {
+    flex-direction: column !important; /* 强制卡片内部垂直 */
+    height: auto !important; /* 卡片高度不再硬编码 */
+  }
+
+  /* nth-child(even) 不再 row-reverse，全部回归同一时空 */
+  .post-card-horizontal:nth-child(even) {
+    flex-direction: column !important;
+  }
+
+  /* 封面图：移至最上方并占满宽度 */
+  .post-card-horizontal .post-cover {
+    flex: none !important;
+    width: 100% !important;
+    height: 200px !important; /* 移动端固定高度 */
+    border-radius: 16px 16px 0 0 !important; /* 修正圆角：只有上方需要圆角 */
+  }
+
+  .post-card-horizontal .post-cover img {
+    border-radius: 16px 16px 0 0 !important;
+  }
+
+  /* 卡片主体：压榨 Padding */
+  .post-card-horizontal .post-body {
+    flex: none !important;
+    width: 100% !important;
+    padding: 20px !important; /* 缩小Padding，释放文字空间 */
+    justify-content: flex-start !important;
+  }
+
+  /* 6. 文章详情页：压榨 Margin 与 Padding */
+  .post-detail {
+    margin-top: -60px !important; /* 减小 negative margin */
+    padding: 30px 15px !important; /* 极度压榨左右Padding */
+    border-radius: 20px !important;
+  }
+
+  .post-detail-meta {
+    justify-content: center !important; /* Meta 在中间对齐 */
+  }
+
+  .post-content h2 { font-size: 1.3em !important; }
+  .post-content h3 { font-size: 1.1em !important; }
+  .post-content { font-size: 15px !important; }
+
+  /* 7. 侧边栏：修复头像和数据统计在堆叠下的排版 */
+  .author-card .author-name { font-size: 16px !important; }
+  .author-card .author-desc { font-size: 12px !important; }
+  .author-stats { gap: 10px !important; }
+  .stat-num { font-size: 14px !important; }
+  .stat-label { font-size: 11px !important; }
+}
+
+# 极限防御：针对 480px 以下小屏幕的微调
+@media (max-width: 480px) {
+  .hero-slogan .typewriter {
+    font-size: 20px !important;
+    letter-spacing: 1px !important;
+  }
+}
