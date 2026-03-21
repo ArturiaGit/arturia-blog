@@ -1,0 +1,116 @@
+# Hexo Configuration
+## Docs: https://hexo.io/docs/configuration.html
+## Source: https://github.com/hexojs/hexo/
+
+# Site
+title: Arturia
+subtitle: '万物皆有其声，我亦是如此。'
+description: 'Arturia的个人博客，深耕.NET生态与C#后端架构，探索AI前沿技术与前端重构。记录代码世界的踩坑实录、技术沉淀以及ACG生活碎片。'
+keywords: '.NET, C#, 后端开发, AI, 人工智能, 独立博客, Hexo, 技术分享, ACG, 二次元'
+author: Arturia
+language: zh-CN  # 修正：标准的简体中文代码是 zh-CN，错误的拼写会影响浏览器的语言识别
+timezone: 'Asia/Shanghai' # 添加：确保生成的文章时间戳准确无误
+
+# URL
+## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
+url: https://blog.arturia.cn  # 换上你专属的绝对领域
+permalink: p/:abbrlink/     # SEO 核心优化：去掉冗长的年月日层级
+permalink_defaults:
+pretty_urls:
+  trailing_index: true # Set to false to remove trailing 'index.html' from permalinks
+  trailing_html: true # Set to false to remove trailing '.html' from permalinks
+
+# Directory
+source_dir: source
+public_dir: public
+tag_dir: tags
+archive_dir: archives
+category_dir: categories
+code_dir: downloads/code
+i18n_dir: :lang
+skip_render:
+
+# Writing
+new_post_name: :title.md # File name of new posts
+default_layout: post
+titlecase: false # Transform title into titlecase
+external_link:
+  enable: true # Open external links in new tab
+  field: site # Apply to the whole site
+  exclude: ''
+filename_case: 0
+render_drafts: false
+post_asset_folder: false
+relative_link: false
+future: true
+syntax_highlighter: highlight.js
+highlight:
+  line_number: true
+  auto_detect: false
+  tab_replace: ''
+  wrap: true
+  hljs: false
+prismjs:
+  preprocess: true
+  line_number: true
+  tab_replace: ''
+
+# Home page setting
+# path: Root path for your blogs index page. (default = '')
+# per_page: Posts displayed per page. (0 = disable pagination)
+# order_by: Posts order. (Order by date descending by default)
+index_generator:
+  path: ''
+  per_page: 10
+  order_by: -date
+
+# Category & Tag
+default_category: uncategorized
+category_map:
+tag_map:
+
+# Metadata elements
+## https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta
+meta_generator: true
+
+# Date / Time format
+## Hexo uses Moment.js to parse and display date
+## You can customize the date format as defined in
+## http://momentjs.com/docs/#/displaying/format/
+date_format: YYYY-MM-DD
+time_format: HH:mm:ss
+## updated_option supports 'mtime', 'date', 'empty'
+updated_option: 'mtime'
+
+# Pagination
+## Set per_page to 0 to disable pagination
+per_page: 10
+pagination_dir: page
+
+# Include / Exclude file(s)
+## include:/exclude: options only apply to the 'source/' folder
+include:
+exclude:
+ignore:
+
+# Extensions
+## Plugins: https://hexo.io/plugins/
+## Themes: https://hexo.io/themes/
+theme: arturia-acg
+
+# Deployment
+## Docs: https://hexo.io/docs/one-command-deployment
+deploy:
+  type: ''
+
+search:
+  path: search.json
+  field: post
+  content: true
+  format: html
+
+  # abbrlink config (生成唯一永久文章链接)
+abbrlink:
+  alg: crc32      # 算法：crc32比crc16更复杂，生成8位字符，冲突率极低
+  rep: hex        # 进制：hex表示十六进制，生成包含字母和数字的极简ID
+  drafts: false   # 不为草稿生成链接

@@ -1,0 +1,75 @@
+<article class="post-detail">
+  <h1 class="post-title"><%= page.title %></h1>
+  <div class="post-detail-meta">
+    <span class="meta-item"><i class="fas fa-file-word"></i> 字数: <%= wordcount(page.content) %></span>
+    <span class="meta-divider">|</span>
+    <span class="meta-item"><i class="fas fa-clock"></i> 阅读时长: <%= min2read(page.content) %> 分钟</span>
+    <span class="meta-divider">|</span>
+    <span class="meta-item"><i class="fas fa-calendar-alt"></i> 发布于: <%= date(page.date, 'YYYY-MM-DD') %></span>
+  </div>
+  <div class="post-content">
+    <%- page.content %>
+  </div>
+
+  <div class="post-copyright-card glass-card">
+    <div class="copyright-item"><i class="fas fa-user-circle"></i> <span>作者：</span>Arturia</div>
+    <div class="copyright-item"><i class="fas fa-link"></i> <span>链接：</span><a href="<%- page.permalink %>"><%- page.permalink %></a></div>
+    <div class="copyright-item"><i class="fas fa-copyright"></i> <span>声明：</span>本博客所有文章除特别声明外，均采用 BY-NC-SA 许可协议。转载请注明出处！</div>
+  </div>
+
+  <div class="copyright-tags">
+    <% if (page.tags && page.tags.length){ %>
+      <% page.tags.forEach(function(tag){ %>
+        <a href="<%- url_for(tag.path) %>" class="tag-pill"><%- tag.name %></a>
+      <% }) %>
+    <% } %>
+  </div>
+
+  <div class="post-nav-card glass-card">
+    <% if (page.prev) { %>
+      <a class="nav-item" href="<%= url_for(page.prev.path) %>">
+        <span class="nav-bg" style="background-image: url('<%- page.prev.cover || theme.default_cover %>');"></span>
+        <span class="nav-overlay"></span>
+        <span class="nav-content">
+          <span class="nav-label">上一篇</span>
+          <span class="nav-title"><%= page.prev.title %></span>
+          <span class="nav-excerpt"><%- page.prev.excerpt || strip_html(page.prev.content).substring(0, 80) + '...' %></span>
+        </span>
+      </a>
+    <% } %>
+    <% if (page.next) { %>
+      <a class="nav-item" href="<%= url_for(page.next.path) %>">
+        <span class="nav-bg" style="background-image: url('<%- page.next.cover || theme.default_cover %>');"></span>
+        <span class="nav-overlay"></span>
+        <span class="nav-content">
+          <span class="nav-label">下一篇</span>
+          <span class="nav-title"><%= page.next.title %></span>
+          <span class="nav-excerpt"><%- page.next.excerpt || strip_html(page.next.content).substring(0, 80) + '...' %></span>
+        </span>
+      </a>
+    <% } %>
+  </div>
+
+  <div class="related-posts-card glass-card">
+    <h3 class="related-title">相关文章推荐</h3>
+    <div class="related-grid">
+      <%
+        var relatedPosts = site.posts.filter(function(p) {
+          if (p.path === page.path) return false;
+          var sameTag = page.tags && p.tags && p.tags.length && page.tags.some(function(t) { return p.tags.findOne({ name: t.name }); });
+          var sameCat = page.categories && p.categories && p.categories.length && page.categories.some(function(c) { return p.categories.findOne({ name: c.name }); });
+          return sameTag || sameCat;
+        }).limit(6);
+      %>
+      <% relatedPosts.forEach(function(post){ %>
+        <a class="related-item" href="<%= url_for(post.path) %>">
+          <span class="related-bg" style="background-image: url('<%- post.cover || theme.default_cover %>');"></span>
+          <span class="related-content">
+            <span class="related-title-text"><%= post.title %></span>
+            <span class="related-excerpt"><%- post.excerpt || strip_html(post.content).substring(0, 80) + '...' %></span>
+          </span>
+        </a>
+      <% }) %>
+    </div>
+  </div>
+</article>

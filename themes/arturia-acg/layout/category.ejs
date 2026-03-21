@@ -1,0 +1,22 @@
+<section class="cyber-category-page">
+  <div class="category-header-hologram">
+    <h1 class="section-title">
+      <i class="fas fa-folder-open neon-icon"></i>
+      Category / <%= page.category || page.title %>
+    </h1>
+    <p class="category-subtitle">正在访问 [ <%= page.category || page.title %> ] 节点数据_</p>
+  </div>
+
+  <div class="holographic-data-array">
+    <% page.posts.each(function(post){ %>
+      <a class="data-row-card" href="<%= url_for(post.path) %>">
+        <div class="row-indicator"></div>
+        <div class="row-content">
+          <span class="row-date"><i class="far fa-clock"></i> <%= post.date.format('YYYY-MM-DD') %></span>
+          <h3 class="row-title"><%= post.title %></h3>
+        </div>
+        <div class="row-action"><i class="fas fa-chevron-right"></i></div>
+      </a>
+    <% }) %>
+  </div>
+</section>

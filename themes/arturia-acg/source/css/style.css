@@ -1,0 +1,2175 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.global-background-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 5;
+  background: rgba(15, 20, 30, var(--bg-mask-opacity));
+  backdrop-filter: blur(var(--bg-blur)) saturate(130%);
+  pointer-events: none;
+}
+
+.holographic-grid {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.18) 1px, transparent 1px);
+  background-size: 28px 28px;
+  opacity: var(--bg-grid-opacity);
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+:root {
+  --glass-bg: rgba(255, 255, 255, 0.2);
+  --glass-border: rgba(255, 255, 255, 0.25);
+  --text-main: #f8fafc;
+  --text-muted: rgba(255, 255, 255, 0.75);
+  --shadow-soft: 0 12px 30px rgba(0, 0, 0, 0.28);
+  --radius-pill: 999px;
+  --neon-cyan: #b48ead;
+  --neon-violet: #88c0d0;
+  --neon-pink: #ff7ad9;
+  --neon-blue: #6aa9ff;
+  --text-on-neon: #fff;
+}
+
+body {
+  font-family: "Quicksand", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+  background-color: #0b0f1a;
+  color: var(--text-main);
+  line-height: 1.7;
+  cursor: url('https://cdn.jsdelivr.net/npm/butterfly-ext-src@1.1.3/img/default.cur'), auto;
+}
+
+a, button, .nav-item {
+  cursor: url('https://cdn.jsdelivr.net/npm/butterfly-ext-src@1.1.3/img/pointer.cur'), pointer;
+}
+
+::selection {
+  background: #0055CC;
+  color: #FFFFFF;
+  text-shadow: 0 0 6px rgba(0, 85, 204, 0.6);
+}
+
+::-moz-selection {
+  background: #0055CC;
+  color: #FFFFFF;
+  text-shadow: 0 0 6px rgba(0, 85, 204, 0.6);
+}
+
+h1, h2, h3, h4, h5, h6,
+p, li {
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.top-nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 100;
+  background: transparent;
+  backdrop-filter: none;
+  border: none;
+  box-shadow: none;
+  transition: background 0.3s ease, box-shadow 0.3s ease, backdrop-filter 0.3s ease;
+}
+
+.top-nav.nav-scrolled {
+  background: rgba(20, 20, 20, 0.6);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.nav-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 22px;
+}
+
+.logo {
+  font-weight: 700;
+  letter-spacing: 1px;
+  font-size: 18px;
+}
+
+.nav-menu {
+  display: flex;
+  list-style: none;
+  gap: 12px;
+}
+
+.nav-menu a {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  padding: 8px 10px;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  transition: background 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.nav-menu a:hover {
+  background: rgba(255, 255, 255, 0.18);
+  transform: translateY(-1px);
+  box-shadow: inset 0 0 6px rgba(255, 255, 255, 0.2), 0 8px 32px rgba(0, 0, 0, 0.15);
+}
+
+.nav-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: inset 0 0 6px rgba(255, 255, 255, 0.2), 0 8px 32px rgba(0, 0, 0, 0.15);
+}
+
+.hero {
+  height: 100vh;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 10;
+  padding: 0 20px;
+}
+
+.hero-slogan {
+  font-size: clamp(26px, 4.2vw, 58px);
+  font-weight: 600;
+  text-shadow: 0 10px 28px rgba(0, 0, 0, 0.55);
+}
+
+.typewriter {
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  border-right: 2px solid rgba(86, 243, 255, 0.9); /* 升级为霓虹青光标 */
+  /* "愿星轨为你指引方向_" 共10个字符，动画设为 10 步 */
+  animation: typing var(--typing-speed) steps(10, end) infinite, blink 0.8s step-end infinite;
+  padding-right: 4px; /* 给光标留一点呼吸空间 */
+}
+
+@keyframes typing {
+  0% { width: 0; }
+  /* 9个汉字 + 1个符号，约占 10.5em 的宽度 */
+  45% { width: 10.5em; }
+  100% { width: 10.5em; }
+}
+
+@keyframes blink {
+  0%, 100% { border-color: transparent; }
+  50% { border-color: rgba(86, 243, 255, 0.9); }
+}
+
+.hero-arrow {
+  position: absolute;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  z-index: 1;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-soft);
+  animation: bounce 1.6s ease-in-out infinite;
+}
+
+.hero-arrow i {
+  font-size: 16px;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translate(-50%, 0); }
+  50% { transform: translate(-50%, 10px); }
+}
+
+.page-hero {
+  height: 50vh;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding-top: 60px;
+}
+
+.page-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.page-hero-inner {
+  position: relative;
+  z-index: 1;
+}
+
+.page-hero-inner h1 {
+  font-size: clamp(22px, 3vw, 40px);
+}
+
+.main {
+  position: relative;
+  z-index: 10;
+  padding: 40px 20px 80px;
+}
+
+.layout-shell {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.content-area {
+  flex: 0 0 75%;
+}
+
+.sidebar-area {
+  position: relative;
+  z-index: 10;
+  flex: 0 0 25%;
+}
+
+.post-list {
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+}
+
+.post-card {
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: inset 0 0 6px rgba(255, 255, 255, 0.2), 0 8px 32px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(25px);
+  transition: box-shadow 0.25s ease;
+  display: flex;
+  height: 260px;
+}
+
+.post-card:hover {
+  box-shadow: inset 0 0 6px rgba(255, 255, 255, 0.2), 0 12px 36px rgba(0, 0, 0, 0.2);
+}
+
+.post-card-horizontal {
+  display: flex;
+  height: 260px;
+}
+
+.post-card-horizontal .post-cover {
+  flex: 0 0 45%;
+  height: 100%;
+}
+
+.post-card-horizontal .post-body {
+  flex: 0 0 55%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 40px;
+}
+
+.post-card-horizontal:nth-child(even) {
+  flex-direction: row-reverse;
+}
+
+.post-card-horizontal:nth-child(even) .post-cover img {
+  border-radius: 0 16px 16px 0;
+}
+
+.post-card-horizontal:nth-child(odd) .post-cover img {
+  border-radius: 16px 0 0 16px;
+}
+
+.post-cover {
+  display: block;
+  height: 100%;
+  overflow: hidden;
+}
+
+.post-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.post-card:hover .post-cover img {
+  transform: scale(1.05);
+}
+
+.post-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 40px;
+  gap: 12px;
+}
+
+.post-title {
+  font-size: 20px;
+  margin-bottom: 0;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+.post-excerpt {
+  color: var(--text-muted);
+  font-size: 14px;
+  margin-top: 0;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+.post-meta {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.78);
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.post-meta .meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.post-meta .meta-item i {
+  font-size: 12px;
+  opacity: 0.9;
+}
+
+.post-meta .meta-item a {
+  color: inherit;
+}
+
+/* =========================================
+   修复横向卡片元数据 (Meta) 溢出问题
+   ========================================= */
+.post-card-horizontal .post-meta {
+  display: flex;
+  flex-wrap: wrap;         /* 核心防御：允许内容在触达边界时自动换行 */
+  align-items: center;
+  row-gap: 10px;           /* 换行后产生的上下行间距 */
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* 针对单个标签或分类过长的极限防御 */
+.post-card-horizontal .post-meta .meta-item {
+  white-space: nowrap;     /* 保持单个胶囊/标签内部不换行 */
+  max-width: 100%;         /* 最大宽度不允许超过父容器 */
+  overflow: hidden;
+  text-overflow: ellipsis; /* 若单个项目依然过长，优雅地显示省略号 */
+}
+
+.meta-divider {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.post-detail {
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 30px;
+  padding: 50px 8%;
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(25px);
+  margin-top: -80px;
+  position: relative;
+  z-index: 10;
+}
+
+.post-detail-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 12px 0 20px;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 13px;
+}
+
+.post-detail-meta .meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.post-detail-meta .meta-item i {
+  font-size: 12px;
+  opacity: 0.9;
+}
+
+.post-content {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.1rem;
+  line-height: 1.8;
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(20px) saturate(120%);
+  padding: 24px 28px;
+  margin-top: 20px;
+}
+
+.copyright-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.copyright-item span {
+  font-weight: 600;
+  color: #fff;
+}
+
+.copyright-item a {
+  color: #fff;
+  text-decoration: underline;
+}
+
+.copyright-tags {
+  margin-top: 15px;
+}
+
+.tag-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  margin: 6px 6px 0 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  font-size: 12px;
+}
+
+.post-nav-card {
+  padding: 0 !important;
+  overflow: hidden;
+  display: flex;
+  gap: 16px;
+}
+
+.post-nav-card .nav-item {
+  position: relative;
+  flex: 1 1 0;
+  height: 150px;
+  border-radius: 18px;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  padding: 16px;
+}
+
+.post-nav-card .nav-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  filter: saturate(1.1);
+  transition: transform 0.3s ease-in-out;
+}
+
+.post-nav-card .nav-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  transition: opacity 0.25s ease;
+}
+
+.post-nav-card .nav-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: #fff;
+}
+
+.post-nav-card .nav-label {
+  font-size: 12px;
+  opacity: 0.85;
+}
+
+.post-nav-card .nav-title {
+  font-size: 16px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.post-nav-card .nav-excerpt {
+  font-size: 12px;
+  line-height: 1.4;
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: opacity 0.25s ease, max-height 0.25s ease;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.post-nav-card .nav-item:hover .nav-excerpt {
+  opacity: 1;
+  max-height: 40px;
+}
+
+.post-nav-card .nav-item:hover .nav-bg {
+  transform: scale(1.05);
+}
+
+.post-nav-card .nav-item:hover .nav-overlay {
+  opacity: 0.6;
+}
+
+.related-posts-card .related-title {
+  font-size: 18px;
+  margin-bottom: 16px;
+}
+
+.related-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.related-item {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  min-height: 140px;
+  display: flex;
+  align-items: flex-end;
+  padding: 14px;
+}
+
+.related-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  filter: saturate(1.05);
+  transition: transform 0.3s ease-in-out;
+}
+
+.related-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: #fff;
+}
+
+.related-title-text {
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.related-excerpt {
+  font-size: 12px;
+  line-height: 1.4;
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: opacity 0.25s ease, max-height 0.25s ease;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.related-item::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  transition: opacity 0.25s ease;
+}
+
+.related-item:hover .related-excerpt {
+  opacity: 1;
+  max-height: 40px;
+}
+
+.related-item:hover .related-bg {
+  transform: scale(1.05);
+}
+
+.related-item:hover::after {
+  opacity: 0.6;
+}
+
+@media (max-width: 1024px) {
+  .related-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .post-nav-card {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 640px) {
+  .related-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.post-content h1, .post-content h2, .post-content h3 {
+  margin: 24px 0 12px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+.post-content p {
+  margin: 12px 0;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+.post-content pre {
+  background: rgba(0, 0, 0, 0.45);
+  padding: 16px;
+  border-radius: 22px;
+  overflow: auto;
+}
+
+figure.highlight {
+  background: rgba(0, 0, 0, 0.45);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+figure.highlight table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+figure.highlight td {
+  padding: 0;
+  vertical-align: top;
+}
+
+figure.highlight td.gutter,
+figure.highlight td.code {
+  background: transparent;
+}
+
+figure.highlight td.gutter {
+  padding: 14px 10px 14px 14px;
+  color: rgba(255, 255, 255, 0.6);
+  user-select: none;
+}
+
+figure.highlight td.code {
+  padding: 14px 16px 14px 0;
+}
+
+figure.highlight pre {
+  margin: 0;
+  background: transparent;
+}
+
+.post-content code {
+  font-family: "Fira Code", "JetBrains Mono", monospace;
+}
+
+.section-title {
+  font-size: 28px;
+  margin-bottom: 24px;
+}
+
+.tags-page {
+  padding: 28px;
+}
+
+/* =========================================
+   Crystal Tags Grid (冰晶标签阵列)
+   ========================================= */
+.tags-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 20px;
+  margin-top: 30px;
+}
+
+.tag-grid-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 20px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  border: 1px solid #ffffff;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  text-align: center;
+}
+
+.tag-grid-card:hover {
+  transform: translateY(-5px);
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #ffffff;
+  box-shadow: 0 10px 25px rgba(180, 142, 173, 0.2), inset 0 0 15px rgba(255, 255, 255, 0.05);
+}
+
+.tag-grid-card .tag-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: 1px;
+}
+
+.tag-grid-card .tag-count {
+  font-size: 13px;
+  color: #88c0d0;
+  margin-top: 8px;
+  font-family: "JetBrains Mono", monospace;
+  opacity: 0.8;
+}
+
+/* =========================================
+   Holographic Categories (全息分类机柜)
+   ========================================= */
+.categories-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 24px;
+  margin-top: 40px;
+}
+
+.category-folder-card {
+  display: flex;
+  align-items: center;
+  padding: 30px 35px;
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-left: 4px solid #ffffff;
+  border-radius: 16px;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.category-folder-card:hover {
+  transform: translateY(-4px) translateX(4px);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+  border-left-color: #fff;
+  box-shadow: 0 12px 30px rgba(180, 142, 173, 0.15), inset 0 0 20px rgba(180, 142, 173, 0.05);
+}
+
+.folder-icon {
+  font-size: 38px;
+  color: #ffffff;
+  margin-right: 24px;
+  opacity: 0.9;
+  transition: all 0.4s;
+}
+
+.category-folder-card:hover .folder-icon {
+  color: #fff;
+  transform: scale(1.1);
+  text-shadow: 0 0 15px #b48ead;
+}
+
+.category-name {
+  font-size: 20px;
+  font-weight: 600;
+  color: #fff;
+  margin: 0 0 6px 0;
+  letter-spacing: 1px;
+}
+
+.category-count {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+  font-family: "JetBrains Mono", monospace;
+}
+
+.tag-detail-page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.tag-post-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.tag-post-card {
+  display: flex;
+  background: rgba(20, 20, 30, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+  backdrop-filter: blur(15px);
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.tag-post-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.25);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.tag-post-cover {
+  flex: 0 0 120px;
+  height: 100%;
+}
+
+.tag-post-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.tag-post-body {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 20px;
+  gap: 8px;
+}
+
+.tag-post-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.95);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tag-post-date {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.archive-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.archive-list li {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 30px;
+  padding: 16px 22px;
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(12px);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.archive-list .date {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 13px;
+}
+
+.page {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 30px;
+  padding: 28px;
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(12px);
+}
+
+@media (max-width: 768px) {
+  .nav-inner {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .nav-menu {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .main {
+    padding-top: 20px;
+  }
+
+  .hero-arrow {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+.search-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(15px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+  z-index: 120;
+}
+
+.search-overlay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1px);
+  background-size: 30px 30px;
+  opacity: 0.25;
+  mix-blend-mode: screen;
+}
+
+.search-panel {
+  position: fixed;
+  top: 90px;
+  left: 50%;
+  transform: translate(-50%, -12px);
+  width: min(600px, calc(100% - 32px));
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.28s ease, transform 0.28s ease;
+  z-index: 130;
+}
+
+.search-panel.is-active,
+.search-overlay.is-active {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(-50%, 0);
+}
+
+.search-container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.search-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 18px;
+  border-radius: 50px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 10px 26px rgba(18, 24, 40, 0.35);
+}
+
+.search-box::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.22);
+  filter: blur(10px);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  z-index: -1;
+}
+
+.search-panel.is-active .search-box::after,
+.search-box:focus-within::after {
+  opacity: 1;
+  animation: breath-glow 2.8s ease-in-out infinite;
+}
+
+.search-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.55);
+  color: #1f2937;
+  box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);
+}
+
+.search-input {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 16px;
+  color: #e2e8f0;
+}
+
+.search-input::placeholder {
+  color: rgba(226, 232, 240, 0.75);
+  transition: color 0.25s ease;
+}
+
+.search-input:focus::placeholder {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.search-results {
+  margin-top: 16px;
+  list-style: none;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(15px);
+  border-radius: 26px;
+  padding: 8px;
+  box-shadow: 0 14px 40px rgba(14, 19, 32, 0.45);
+  max-height: 420px;
+  overflow: auto;
+}
+
+.search-results li a {
+  display: block;
+  padding: 12px 14px;
+  border-radius: 18px;
+  color: #0f172a;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.search-results li a:hover {
+  background: rgba(255, 255, 255, 0.85);
+  transform: translateY(-1px);
+}
+
+.search-results .title {
+  font-weight: 600;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.search-results .snippet {
+  font-size: 13px;
+  color: rgba(15, 23, 42, 0.7);
+}
+
+.search-results .hl {
+  color: #0b0f1a;
+  background: rgba(255, 255, 255, 0.75);
+  padding: 0 4px;
+  border-radius: 8px;
+}
+
+.sidebar-card {
+  background: rgba(15, 20, 30, 0.75) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  box-shadow: inset 0 0 6px rgba(255, 255, 255, 0.2), 0 8px 32px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(20px) saturate(120%);
+  padding: 18px;
+  margin-bottom: 20px;
+}
+
+.author-card {
+  text-align: center;
+}
+
+/* =========================================
+   侧边栏头像：基础处理、霓虹青呼吸光晕与悬浮旋转
+   ========================================= */
+
+/* 1. 基础静态处理样式（修复“原图”问题） */
+.sidebar-profile .avatar-img {
+  width: 120px;  /* 统一尺寸，与关于页对齐 */
+  height: 120px;
+  border-radius: 50%;  /* 核心：强制圆形 */
+  object-fit: cover;   /* 核心：裁剪填满，防止拉伸失真 */
+  display: inline-block; /* 修正定位 */
+  margin-bottom: 15px; /* 下方留白 */
+  vertical-align: middle;
+
+  /* 注入 Arturia 专属冷峻冰蓝边框 */
+  border: 2px solid rgba(136, 192, 208, 0.8) !important;
+
+  /* 注入 Arturia 专属冷峻霓虹青 + 冰蓝双层光晕阴影 (静态状态) */
+  box-shadow:
+    0 0 20px rgba(86, 243, 255, 0.3),    /* 内层：霓虹青核心 */
+    0 0 40px rgba(136, 192, 208, 0.15) !important;  /* 外层：冰蓝扩散 */
+
+  /* 注入呼吸动效 */
+  animation: sidebar-avatar-pulse 4s infinite;
+
+  /* 确保之前的 transition 属性依然存在，用于平滑过渡悬浮旋转 */
+  transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+  will-change: transform; /* 开启 GPU 加速 */
+}
+
+/* 侧边栏头像专属呼吸灯动效 (非粉色，霓虹青+冰蓝交织) */
+@keyframes sidebar-avatar-pulse {
+  0%, 100% {
+    box-shadow:
+      0 0 20px rgba(86, 243, 255, 0.3),
+      0 0 40px rgba(136, 192, 208, 0.15);
+  }
+  50% {
+    box-shadow:
+      0 0 30px rgba(86, 243, 255, 0.5),    /* 霓虹青加强 */
+      0 0 60px rgba(136, 192, 208, 0.25);   /* 冰蓝加强 */
+  }
+}
+
+/* 2. 兼容之前的悬浮旋转状态 (:hover) */
+.sidebar-profile .avatar-img:hover {
+  /* 仅保留旋转效果，让呼吸动效和旋转平滑叠加 */
+  transform: rotate(360deg) !important;
+}
+
+.author-name {
+  font-size: 18px;
+  margin-bottom: 6px;
+  color: #56f3ff !important;
+  text-shadow: 0 0 10px rgba(86, 243, 255, 0.4);
+  letter-spacing: 1px;
+}
+
+.author-desc {
+  font-size: 13px;
+  color: #88c0d0 !important;
+}
+
+.author-stats {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 60px;
+}
+
+.stat-num {
+  font-weight: 700;
+  color: var(--neon-cyan);
+  font-size: 16px;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.sidebar-title {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.tag-cloud a {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  margin: 4px 6px 0 0;
+  border-radius: 20px;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: rgba(255, 255, 255, 0.85);
+  transition: all 0.3s ease;
+}
+
+.tag-cloud a:hover {
+  transform: translateY(-2px);
+  color: var(--neon-cyan);
+  border-color: var(--neon-cyan);
+  box-shadow: 0 4px 12px rgba(86, 243, 255, 0.3);
+}
+
+.recent-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.recent-item {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.recent-cover {
+  width: 72px;
+  height: 54px;
+  border-radius: 12px;
+  overflow: hidden;
+  flex: 0 0 auto;
+  box-shadow: inset 0 0 6px rgba(255, 255, 255, 0.2), 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.recent-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.recent-item:hover .recent-cover img {
+  transform: scale(1.1);
+}
+
+.recent-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.recent-title {
+  font-size: 14px;
+  color: var(--text-main);
+  font-weight: 600;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.recent-date {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.recent-item:hover .recent-title {
+  color: #fff;
+}
+
+.recent-item:hover .recent-cover {
+  transform: translateY(-1px);
+  transition: transform 0.2s ease;
+}
+
+@media (max-width: 1024px) {
+  .layout-shell {
+    flex-direction: column;
+  }
+
+  .content-area,
+  .sidebar-area {
+    flex: 1 1 auto;
+  }
+
+  .post-card-horizontal {
+    height: auto;
+    flex-direction: column;
+  }
+
+  .post-card-horizontal:nth-child(even) {
+    flex-direction: column;
+  }
+
+  .post-card-horizontal .post-cover {
+    flex: none;
+    height: 200px;
+  }
+
+  .post-card-horizontal .post-cover img {
+    border-radius: 16px 16px 0 0;
+  }
+}
+
+@keyframes breath-glow {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 0.85; }
+}
+
+@keyframes icon-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+}
+
+/* =========================================
+   Star-trail Timeline Archives (二次元星轨归档)
+   ========================================= */
+.cyber-timeline-page {
+  padding: 20px 0;
+}
+
+.timeline-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.timeline-subtitle {
+  color: #88c0d0;
+  font-size: 14px;
+  letter-spacing: 2px;
+}
+
+.timeline-container {
+  position: relative;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 20px 0;
+}
+
+.timeline-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, #ffffff, transparent);
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+  z-index: 1;
+}
+
+.timeline-year-node {
+  text-align: center;
+  margin: 40px 0;
+  position: relative;
+  z-index: 2;
+}
+
+.year-text {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.95);
+  padding: 6px 24px;
+  border-radius: 999px;
+  font-weight: 500;
+  font-size: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(12px);
+}
+
+.timeline-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 40px;
+  position: relative;
+  z-index: 2;
+}
+
+.timeline-item.left {
+  flex-direction: row;
+}
+
+.timeline-item.right {
+  flex-direction: row-reverse;
+}
+
+.timeline-node {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(180, 142, 173, 0.2);
+  border: 2px solid #ffffff;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  transition: all 0.4s ease;
+}
+
+.timeline-card {
+  width: 44%;
+  background: rgba(20, 20, 30, 0.45);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.timeline-card:hover {
+  transform: translateY(-5px);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: #88c0d0;
+  box-shadow: 0 10px 30px rgba(136, 192, 208, 0.2);
+}
+
+.timeline-card:hover ~ .timeline-node,
+.timeline-item:hover .timeline-node {
+  background: #fff;
+  border-color: #fff;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.8), 0 0 30px #88c0d0;
+}
+
+.timeline-date {
+  font-size: 12px;
+  color: #88c0d0;
+  font-family: "JetBrains Mono", monospace;
+}
+
+.timeline-title {
+  font-size: 16px;
+  color: #fff;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.timeline-excerpt {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.65);
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .timeline-container::before {
+    left: 20px;
+    transform: none;
+  }
+
+  .timeline-year-node {
+    text-align: left;
+    padding-left: 45px;
+  }
+
+  .timeline-item.left,
+  .timeline-item.right {
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
+  .timeline-node {
+    left: 20px;
+    transform: translateX(-5px);
+  }
+
+  .timeline-card {
+    width: calc(100% - 50px);
+  }
+}
+
+/* 标准化全站自定义鼠标指针 */
+body {
+  cursor: url('https://cdn.jsdelivr.net/gh/miskcoo/moe-cursors/Moe-Normal.cur'), auto;
+}
+
+a, button, .nav-item, .post-card, .recent-item, .logo {
+  cursor: url('https://cdn.jsdelivr.net/gh/miskcoo/moe-cursors/Moe-Pointer.cur'), pointer;
+}
+
+/* =========================================
+   细节回调：侧边栏数据统计与标签云的高亮焦点
+   ========================================= */
+
+.author-profile-card .site-state-item-count,
+.author-profile-card .stat-count,
+.author-profile-card .site-state-item a span.count {
+  color: #56f3ff !important;
+  text-shadow: 0 0 8px rgba(86, 243, 255, 0.4);
+  font-weight: 700;
+  font-family: "JetBrains Mono", monospace;
+}
+
+.tagcloud a:hover,
+.tags-cloud a:hover,
+.sidebar-card.tags-card a:hover {
+  color: #56f3ff !important;
+  text-shadow: 0 0 10px rgba(86, 243, 255, 0.6);
+  transform: translateY(-2px);
+  transition: all 0.3s ease;
+}
+
+/* 标准化选中态与激活态（玻璃质感 + 霓虹点缀） */
+.post-card.is-active,
+.widget-list li.is-active,
+.nav-item.is-active {
+  position: relative;
+  background: rgba(255, 255, 255, 0.08);
+  color: #FFFFFF;
+}
+
+.post-card.is-active::before,
+.widget-list li.is-active::before,
+.nav-item.is-active::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--neon-cyan);
+  border-radius: 3px;
+}
+
+/* 标准化文本选中样式（清爽浅蓝） */
+*::selection {
+  background-color: rgba(86, 243, 255, 0.25);
+  color: #FFFFFF;
+}
+
+*::-moz-selection {
+  background-color: rgba(86, 243, 255, 0.25);
+  color: #FFFFFF;
+}
+
+/* =========================================
+   核弹级覆写：强制夺回侧边栏的霓虹青色控制权
+   ========================================= */
+
+.author-profile-card a span:first-of-type,
+aside .count,
+aside .site-state-item-count,
+aside .stat-count,
+.sidebar-card .count {
+  color: #56f3ff !important;
+  text-shadow: 0 0 10px rgba(86, 243, 255, 0.6) !important;
+  font-weight: 800 !important;
+}
+
+.tagcloud a,
+.tags-cloud a,
+aside .tags-card a {
+  color: #88c0d0 !important;
+  border-color: rgba(136, 192, 208, 0.4) !important;
+}
+
+.tagcloud a:hover,
+.tags-cloud a:hover,
+aside .tags-card a:hover {
+  color: #56f3ff !important;
+  border-color: #56f3ff !important;
+  text-shadow: 0 0 12px rgba(86, 243, 255, 0.9) !important;
+  box-shadow: 0 0 15px rgba(86, 243, 255, 0.25) inset !important;
+  transform: translateY(-3px) !important;
+}
+
+/* =========================================
+   精准狙击：夺回侧边栏的霓虹青色焦点
+   ========================================= */
+
+.stat-num {
+  color: #56f3ff !important;
+  text-shadow: 0 0 10px rgba(86, 243, 255, 0.4) !important;
+}
+
+.tag-cloud a {
+  color: #88c0d0 !important;
+  border-color: rgba(136, 192, 208, 0.4) !important;
+}
+
+.tag-cloud a:hover {
+  color: #56f3ff !important;
+  border-color: #56f3ff !important;
+  text-shadow: 0 0 12px rgba(86, 243, 255, 0.9) !important;
+  box-shadow: 0 0 15px rgba(86, 243, 255, 0.25) inset !important;
+}
+
+/* =========================================
+  高质量渲染 + GPU 视觉优化
+  ========================================= */
+
+img {
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: high-quality;
+}
+
+.post-cover img,
+.recent-cover img,
+.tag-post-cover img,
+.related-bg,
+.nav-bg {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+  will-change: transform;
+}
+
+/* =========================================
+   首页 Slogan 全息发光特效
+   ========================================= */
+.hero-slogan .typewriter {
+  color: #ffffff !important; /* 核心维持高纯度晨曦白，保证阅读清晰度 */
+  letter-spacing: 4px; /* 增加字距，提升排版的呼吸感与史诗感 */
+  text-shadow:
+    0 0 12px rgba(86, 243, 255, 0.9),   /* 内层：高亮的霓虹青核心光晕 */
+    0 0 25px rgba(136, 192, 208, 0.6),  /* 外层：柔和的冰蓝环境光扩散 */
+    0 4px 15px rgba(0, 0, 0, 0.5) !important;      /* 底层：微弱的暗影，确保在亮色背景图上依然可读 */
+}
+
+/* =========================================
+   侧边栏：个性签名专属极客排版
+   ========================================= */
+.sidebar-profile .author-description {
+  color: #88c0d0 !important; /* 强制使用 Arturia 专属冰蓝 */
+  font-family: 'JetBrains Mono', Consolas, monospace !important; /* 强制采用极客等宽代码字体 */
+  font-size: 13px !important; /* 调整为更精致的字号 */
+  line-height: 1.6;
+  margin-top: 10px;
+  letter-spacing: 0.5px; /* 增加一点字间距，提升呼吸感 */
+  text-shadow: 0 0 5px rgba(136, 192, 208, 0.4); /* 添加淡淡的冰蓝全息辉光 */
+}
+
+/* =========================================
+   横向卡片布局终极重构：间距与单行截断
+   ========================================= */
+
+/* 1. 卡片主体排版重置：修正顶部过远、间距过大 */
+.post-card-horizontal .post-body {
+  padding: 30px 40px !important; /* 缩小上下内边距 */
+  justify-content: flex-start !important; /* 核心：取消垂直居中，改为从顶部自然向下排列 */
+  gap: 8px !important; /* 统一且极度缩小子元素（标题/标签/摘要）之间的间距 */
+}
+
+/* 2. 标题溢出截断：强制单行省略号 */
+.post-card-horizontal .post-body .post-title {
+  width: 100% !important;
+  margin: 0 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* 3. 元数据（日期/分类/标签）截断与间距：放弃 Flex，使用 Block 级单行流式截断 */
+.post-card-horizontal .post-body .post-meta {
+  display: block !important; /* 核心：改为块级元素，完美触发单行截断 */
+  width: 100% !important;
+  margin: 0 0 5px 0 !important; /* 修正间距 */
+  white-space: nowrap !important; /* 强制整体不换行 */
+  overflow: hidden !important; /* 隐藏溢出部分 */
+  text-overflow: ellipsis !important; /* 溢出部分显示省略号 */
+}
+
+/* 取消内部标签的独立截断，交由父容器统一在末尾打上省略号 */
+.post-card-horizontal .post-body .post-meta .meta-item,
+.post-card-horizontal .post-body .post-meta .meta-divider {
+  display: inline-block !important;
+  vertical-align: middle !important;
+  max-width: none !important;
+}
+
+/* 4. 摘要截断保护：维持 4 行温和截断 */
+.post-card-horizontal .post-body .post-excerpt {
+  width: 100% !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 4 !important;
+  -webkit-box-orient: vertical !important;
+}
+
+/* =========================================
+   终极修复：打破 Flex 截断重叠与标题空白
+   ========================================= */
+
+/* 1. 确保主容器能够收缩，不被子元素强行撑开 */
+.post-card-horizontal .post-body {
+  min-width: 0 !important;
+}
+
+/* 2. 标题恢复满宽与完美单行截断 */
+.post-card-horizontal .post-body .post-title {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.post-card-horizontal .post-body .post-title a {
+  display: inline !important; /* 放弃对 a 标签的块级限制，交由父级统一截断 */
+}
+
+/* 3. 元数据栏：恢复 Flex 布局，取消父级暴力截断 */
+.post-card-horizontal .post-body .post-meta {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+  text-overflow: clip !important; /* 核心：取消父级省略号，防止覆盖图标 */
+}
+
+/* 4. 标签胶囊：允许收缩，并在胶囊内部优雅截断 */
+.post-card-horizontal .post-body .post-meta .meta-item {
+  display: inline-flex !important;
+  align-items: center !important;
+  flex-shrink: 1 !important; /* 允许在空间不足时收缩 */
+  min-width: 0 !important; /* 核心：打破 Flex 最小宽度陷阱，允许极限压缩 */
+  overflow: hidden !important;
+  text-overflow: ellipsis !important; /* 在胶囊内部显示省略号 */
+  white-space: nowrap !important;
+}
+
+/* 5. 分隔符与图标：绝对不允许被压缩变形，并拉开呼吸感 */
+.post-card-horizontal .post-body .post-meta .meta-divider {
+  flex-shrink: 0 !important;
+}
+
+.post-card-horizontal .post-body .post-meta .meta-item i {
+  margin-right: 6px !important; /* 修复粘连：拉开图标与文字的间距 */
+  flex-shrink: 0 !important; /* 图标绝不压缩变形 */
+}
+
+/* =========================================
+   细节回调：精准收紧 Icon 与文字的间距
+   ========================================= */
+.post-card-horizontal .post-body .post-meta .meta-item {
+  gap: 4px !important; /* 强制接管 Flex 子元素间距，将其缩小到紧凑的 4px */
+}
+
+.post-card-horizontal .post-body .post-meta .meta-item i {
+  margin-right: 0 !important; /* 彻底清除上一轮叠加的 margin，防止双重间距 */
+}
+
+/* =========================================
+   首页横向卡片布局重构：个体优雅省略防御
+   ========================================= */
+/* 核心原则：不改配色/字体，只修复布局与截断 */
+
+/* 1. 精准控制间距：缩小标题和元数据容器之间的边距 */
+.post-card-horizontal .post-body .post-title {
+  margin-bottom: 5px !important;
+}
+
+/* 标题溢出截断保护：确保标题恢复满宽与完美单行截断 */
+.post-card-horizontal .post-body .post-title {
+  display: block !important;
+  width: 100% !important;
+  margin: 0 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* 2. 最高级防御级 Flex 布局：强制开启单行，防止消失Bug */
+.post-card-horizontal .post-body .post-meta {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  flex-wrap: nowrap !important;
+  justify-content: flex-start !important;
+  width: auto !important;
+  max-width: 100% !important;
+  height: auto !important;
+  margin-top: 10px !important;
+  margin-bottom: 10px !important;
+  gap: 12px;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+}
+
+/* 3. 极客核心：个体收缩与优雅省略 */
+/* 日期、分类、分隔符：强制不可收缩 */
+.post-card-horizontal .post-body .post-meta .meta-item:first-child,
+.post-card-horizontal .post-body .post-meta .meta-divider {
+  flex-shrink: 0 !important;
+}
+
+/* 针对标签过多，实现优雅省略：牺牲标签胶囊进行收缩 */
+.post-card-horizontal .post-body .post-meta .meta-item {
+  display: inline-flex !important;
+  align-items: center;
+  flex-shrink: 1 !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* 图标与粘连修复 */
+.post-card-horizontal .post-body .post-meta .meta-item i {
+  margin-right: 6px !important;
+  flex-shrink: 0 !important;
+}
+
+/* =========================================
+   极限空间压榨：元数据间距收缩
+   ========================================= */
+
+/* 1. 缩减父容器整体的间距 (胶囊与点之间的宏观间距) */
+.post-card-horizontal .post-body .post-meta {
+  gap: 6px !important; /* 从之前的 12px 缩减一半 */
+}
+
+/* 2. 缩减胶囊内部的左右留白 */
+.post-card-horizontal .post-body .post-meta .meta-item {
+  padding: 2px 8px !important; /* 减少内边距，让外壳更贴合文字 */
+}
+
+/* 3. 缩减胶囊内部 Icon 和文字的极限间距 */
+.post-card-horizontal .post-body .post-meta .meta-item i {
+  margin-right: 4px !important; /* 从 6px 缩减到 4px，保持最微弱的呼吸感即可 */
+}
+
+/* 4. 缩减分隔点 (Divider) 本身的占位空间 */
+.post-card-horizontal .post-body .post-meta .meta-divider {
+  margin: 0 2px !important; /* 让原点更紧凑，两侧不留大白 */
+}
+
+/* =========================================
+   分类页重构：全息数据列阵 (Holographic Data Array)
+   ========================================= */
+.cyber-category-page {
+  padding: 20px 0;
+}
+
+.category-header-hologram {
+  margin-bottom: 30px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid rgba(136, 192, 208, 0.2);
+}
+
+.category-header-hologram .section-title {
+  font-size: 28px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.category-header-hologram .neon-icon {
+  color: #56f3ff;
+  text-shadow: 0 0 12px rgba(86, 243, 255, 0.6);
+}
+
+.category-subtitle {
+  color: #88c0d0;
+  font-size: 14px;
+  font-family: 'JetBrains Mono', Consolas, monospace;
+  letter-spacing: 1px;
+}
+
+.holographic-data-array {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* 核心面板样式：替换 30px 臃肿圆角，改为 10px 锐利微圆角 */
+.data-row-card {
+  display: flex;
+  align-items: center;
+  background: rgba(20, 20, 30, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px !important;
+  padding: 16px 20px;
+  backdrop-filter: blur(15px);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 左侧全息指示线：默认冰蓝半透明 */
+.data-row-card .row-indicator {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: #88c0d0;
+  opacity: 0.5;
+  transition: all 0.35s ease;
+}
+
+.data-row-card .row-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding-left: 10px; /* 给指示线留空间 */
+  min-width: 0; /* 防止 Flex 溢出，确保标题单行截断生效 */
+}
+
+/* 等宽极客时间戳 */
+.data-row-card .row-date {
+  flex-shrink: 0;
+  font-family: 'JetBrains Mono', Consolas, monospace;
+  color: #88c0d0;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.data-row-card .row-title {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color 0.3s ease;
+}
+
+/* 右侧交互箭头：默认隐藏向左偏移 */
+.data-row-card .row-action {
+  flex-shrink: 0;
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 14px;
+  transform: translateX(-10px);
+  opacity: 0;
+  transition: all 0.35s ease;
+}
+
+/* =========================================
+   交互附魔 (Hover)
+   ========================================= */
+.data-row-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(136, 192, 208, 0.3);
+  transform: translateX(6px); /* 整体向右平移推进 */
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* 悬浮时：左侧指示线点亮为霓虹青 */
+.data-row-card:hover .row-indicator {
+  background: #56f3ff;
+  opacity: 1;
+  box-shadow: 0 0 12px #56f3ff;
+}
+
+.data-row-card:hover .row-title {
+  color: #fff;
+}
+
+/* 悬浮时：箭头出现并点亮霓虹青 */
+.data-row-card:hover .row-action {
+  opacity: 1;
+  transform: translateX(0);
+  color: #56f3ff;
+}
+
+/* 移动端防御排版 */
+@media (max-width: 768px) {
+  .data-row-card .row-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  .data-row-card .row-date {
+    font-size: 12px;
+  }
+}
+
+body {
+  background: transparent !important;
+}
+
+/* =========================================
+   Markdown 极客排版系统 (Post Content Typography)
+   ========================================= */
+
+.post-content {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 16px;
+  line-height: 1.8;
+  word-wrap: break-word;
+}
+
+/* 1. 标题层级 (Headers) */
+.post-content h1, .post-content h2, .post-content h3,
+.post-content h4, .post-content h5, .post-content h6 {
+  color: #fff;
+  font-weight: 600;
+  margin: 1.5em 0 0.8em;
+  position: relative;
+}
+
+.post-content h1 { font-size: 1.8em; }
+.post-content h2 {
+  font-size: 1.5em;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(136, 192, 208, 0.3); /* 冰蓝分割线 */
+}
+.post-content h3 { font-size: 1.3em; color: #88c0d0; } /* H3 使用冰蓝高亮 */
+
+/* 标题悬浮锚点特效 */
+.post-content h1::before, .post-content h2::before, .post-content h3::before {
+  content: '#';
+  position: absolute;
+  left: -20px;
+  color: #56f3ff;
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  transform: translateX(10px);
+}
+.post-content h1:hover::before, .post-content h2:hover::before, .post-content h3:hover::before {
+  opacity: 0.8;
+  transform: translateX(0);
+}
+
+/* 2. 段落与强调 (Paragraphs & Emphasis) */
+.post-content p {
+  margin: 0 0 1.2em;
+}
+.post-content strong {
+  color: #56f3ff; /* 霓虹青强调 */
+  font-weight: 600;
+  text-shadow: 0 0 8px rgba(86, 243, 255, 0.3);
+}
+.post-content em {
+  color: #b48ead; /* 柔和紫红色斜体 */
+}
+
+/* 3. 链接 (Links) */
+.post-content a {
+  color: #88c0d0;
+  text-decoration: none;
+  border-bottom: 1px dashed rgba(136, 192, 208, 0.5);
+  transition: all 0.3s ease;
+}
+.post-content a:hover {
+  color: #56f3ff;
+  border-bottom-color: #56f3ff;
+  text-shadow: 0 0 5px rgba(86, 243, 255, 0.4);
+}
+
+/* 4. 引用块 (Blockquotes) */
+.post-content blockquote {
+  margin: 1.5em 0;
+  padding: 15px 20px;
+  background: rgba(136, 192, 208, 0.1);
+  border-left: 4px solid #56f3ff;
+  border-radius: 0 8px 8px 0;
+  color: rgba(255, 255, 255, 0.85);
+}
+.post-content blockquote p { margin: 0; }
+
+/* 5. 列表 (Lists) */
+.post-content ul, .post-content ol {
+  margin: 0 0 1.2em;
+  padding-left: 25px;
+}
+.post-content li {
+  margin-bottom: 8px;
+}
+.post-content ul li {
+  list-style: none;
+  position: relative;
+}
+.post-content ul li::before {
+  content: '';
+  position: absolute;
+  left: -18px;
+  top: 10px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #88c0d0;
+  box-shadow: 0 0 8px #88c0d0;
+}
+
+/* 6. 行内代码 (Inline Code) */
+.post-content p code, .post-content li code {
+  font-family: 'JetBrains Mono', Consolas, monospace;
+  background: rgba(255, 255, 255, 0.1);
+  color: #ff7ad9; /* 霓虹粉点缀代码 */
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.9em;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* 7. 表格 (Tables) */
+.post-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5em 0;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.post-content th, .post-content td {
+  padding: 12px 15px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: left;
+}
+.post-content th {
+  background: rgba(136, 192, 208, 0.15);
+  color: #56f3ff;
+  font-weight: 600;
+}
+.post-content tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+/* 8. 分割线 (Horizontal Rule) */
+.post-content hr {
+  border: none;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(136, 192, 208, 0.5), transparent);
+  margin: 2em 0;
+}

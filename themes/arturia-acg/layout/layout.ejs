@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <%
+    var currentTitle = page.title;
+    if (is_archive()) {
+      currentTitle = '时空归档';
+    } else if (is_category()) {
+      currentTitle = '领域: ' + page.category;
+    } else if (is_tag()) {
+      currentTitle = '印记: ' + page.tag;
+    }
+  %>
+  <title><% if (is_home()) { %><%= config.title %> | <%= config.subtitle %><% } else if (currentTitle) { %><%= currentTitle %> | <%= config.title %><% } else { %><%= config.title %><% } %></title>
+  <link rel="icon" type="image/png" sizes="128x128" href="<%= url_for('/img/favicon.png') %>" />
+  <link rel="apple-touch-icon" sizes="180x180" href="<%= url_for('/img/favicon.png') %>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="<%= url_for('/css/style.css') %>" />
+  <style>
+    :root {
+      --typing-speed: <%= theme.typewriter_speed || '4s' %>;
+      --bg-blur: <%= (theme.background_style && theme.background_style.blur_radius) || '8px' %>;
+      --bg-mask-opacity: <%= (theme.background_style && theme.background_style.mask_opacity) || '0.5' %>;
+      --bg-grid-opacity: <%= (theme.background_style && theme.background_style.grid_opacity) || '0.2' %>;
+    }
+  </style>
+</head>
+<body>
+  <div class="global-background-overlay">
+    <div class="holographic-grid"></div>
+  </div>
+  <nav class="top-nav">
+    <div class="nav-inner">
+      <a class="logo" href="<%= url_for('/') %>"><%= config.title %></a>
+      <ul class="nav-menu">
+        <% for (var label in theme.menu) { %>
+          <% var item = theme.menu[label].split('||') %>
+          <% var link = item[0].trim() %>
+          <% var icon = (item[1] || '').trim() %>
+          <% if (label !== '环境光') { %>
+          <li>
+            <% if (label === '搜索') { %>
+              <a id="nav-search-btn" href="javascript:void(0);">
+                <span class="nav-icon"><i class="<%= icon %>"></i></span>
+                <span><%= label %></span>
+              </a>
+            <% } else { %>
+              <a href="<%= url_for(link) %>">
+                <span class="nav-icon"><i class="<%= icon %>"></i></span>
+                <span><%= label %></span>
+              </a>
+            <% } %>
+          </li>
+          <% } %>
+        <% } %>
+        <li>
+          <a id="env-light-trigger" href="javascript:void(0);">
+            <span class="nav-icon"><i class="fas fa-magic"></i></span>
+            <span>环境光</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <% var fallbackCover = 'https://api.yimian.xyz/img?type=moe&size=1920x1080'; %>
+  <% var heroCover = (is_post() && page.cover) ? page.cover : (theme.default_cover || fallbackCover); %>
+  <% if (is_home()) { %>
+  <header class="hero" style="background-image: url('<%= heroCover %>');">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h1 class="hero-slogan"><span class="typewriter"><%= theme.hero.slogan %></span></h1>
+    </div>
+    <div class="hero-arrow"><i class="fas fa-chevron-down"></i></div>
+  </header>
+
+  <% } else if (is_archive() || is_tag() || is_category() || page.type === 'tags' || page.type === 'categories') { %>
+  <div class="nav-spacer" style="height: 110px;"></div>
+
+  <% } else { %>
+  <header class="page-hero" style="background-image: url('<%= heroCover %>');">
+    <div class="page-hero-overlay"></div>
+    <div class="page-hero-inner">
+      <h1><%= page.title || config.title %></h1>
+    </div>
+  </header>
+  <% } %>
+
+  <main class="main">
+    <div class="layout-shell">
+      <section class="content-area">
+        <%- body %>
+      </section>
+      <aside class="sidebar-area">
+        <%- partial('_widget/sidebar') %>
+      </aside>
+    </div>
+  </main>
+
+  <div class="search-overlay" id="search-overlay"></div>
+  <div class="search-panel" id="search-panel" aria-hidden="true">
+    <div class="search-container">
+      <div class="search-box">
+        <span class="search-icon"><i class="fas fa-satellite-dish"></i></span>
+        <input id="search-input" class="search-input" type="text" placeholder="搜索文章 / 标签 / 分类" autocomplete="off" />
+      </div>
+      <ul id="search-results" class="search-results"></ul>
+    </div>
+  </div>
+
+  <script src="<%= url_for('/js/search.js') %>"></script>
+  <script>
+    (function() {
+      var nav = document.querySelector('.top-nav');
+      if (!nav) return;
+      var toggleNav = function() {
+        if (window.scrollY > 50) {
+          nav.classList.add('nav-scrolled');
+        } else {
+          nav.classList.remove('nav-scrolled');
+        }
+      };
+      toggleNav();
+      window.addEventListener('scroll', toggleNav, { passive: true });
+    })();
+  </script>
+
+  <div id="cyber-bg-1" style="position: fixed; inset: 0; z-index: -1000; background-size: cover; background-position: center; transition: opacity 0.8s ease; opacity: 1;"></div>
+  <div id="cyber-bg-2" style="position: fixed; inset: 0; z-index: -999; background-size: cover; background-position: center; transition: opacity 0.8s ease; opacity: 0;"></div>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const bgList = <%- JSON.stringify(get_local_bgs()) %>;
+    if (!bgList || bgList.length === 0) return;
+
+    const bg1 = document.getElementById('cyber-bg-1');
+    const bg2 = document.getElementById('cyber-bg-2');
+    const trigger = document.getElementById('env-light-trigger');
+
+    // 1. 读取本地记忆的轮播索引
+    let currentIdx = parseInt(localStorage.getItem('arturia_local_bg_idx')) || 0;
+    if (currentIdx >= bgList.length) currentIdx = 0;
+
+    let activeLayer = 1;
+    let isSwitching = false; // 竞态锁
+
+    // 2. 核心修复：利用 Hexo 的 EJS 动态注入当前页面的专属封面 (若有)
+    const pageCover = "<%- page.cover ? page.cover : '' %>";
+
+    // 3. 智能路由：优先显示页面专属封面，没有则显示全局轮播壁纸
+    const initialBgUrl = pageCover ? pageCover : bgList[currentIdx];
+    bg1.style.backgroundImage = `url(${initialBgUrl})`;
+
+    // 4. 一键轮播渐变逻辑
+    if (trigger) {
+      trigger.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (isSwitching) return; // 防抖，防止疯狂点击
+        isSwitching = true;
+
+        // 计算下一张全局壁纸（点击即打破文章封面限制）
+        currentIdx = (currentIdx + 1) % bgList.length;
+        const nextBgUrl = bgList[currentIdx];
+
+        const nextDiv = activeLayer === 1 ? bg2 : bg1;
+        const currDiv = activeLayer === 1 ? bg1 : bg2;
+
+        // 隐式预加载：无白屏、无闪烁、无重叠
+        const img = new Image();
+        img.src = nextBgUrl;
+        img.onload = () => {
+          nextDiv.style.backgroundImage = `url(${nextBgUrl})`;
+          nextDiv.style.opacity = 1; // 新画布淡入亮起
+          currDiv.style.opacity = 0; // 旧画布淡出隐去
+
+          activeLayer = activeLayer === 1 ? 2 : 1;
+          localStorage.setItem('arturia_local_bg_idx', currentIdx);
+
+          // 动画时间为 0.8s，等待动画结束后解锁
+          setTimeout(() => { isSwitching = false; }, 800);
+        };
+
+        img.onerror = () => { isSwitching = false; };
+      });
+    }
+  });
+  </script>
+</body>
+</html>

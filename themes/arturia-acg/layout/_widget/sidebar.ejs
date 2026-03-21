@@ -1,0 +1,47 @@
+<div class="sidebar-card author-card">
+  <div class="sidebar-profile">
+    <img src="<%- url_for(theme.sidebar.avatar) %>" alt="Avatar" class="avatar-img">
+
+    <h3 class="author-name"><%= theme.sidebar.author %></h3>
+
+    <p class="author-description"><%= theme.sidebar.description %></p>
+  </div>
+  <div class="author-stats">
+    <div class="stat-item">
+      <div class="stat-num"><%- site.posts.length %></div>
+      <div class="stat-label">文章</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num"><%- site.categories.length %></div>
+      <div class="stat-label">分类</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num"><%- site.tags.length %></div>
+      <div class="stat-label">标签</div>
+    </div>
+  </div>
+</div>
+
+<div class="sidebar-card tag-card">
+  <h3 class="sidebar-title">标签云</h3>
+  <div class="tag-cloud">
+    <%- tagcloud({min_font: 12, max_font: 18, amount: 20, color: false}) %>
+  </div>
+</div>
+
+<div class="sidebar-card recent-card">
+  <h3 class="sidebar-title">最新文章</h3>
+  <ul class="recent-list">
+    <% site.posts.sort('date', -1).limit(5).forEach(function(post){ %>
+      <li class="recent-item">
+        <a class="recent-cover" href="<%= url_for(post.path) %>">
+          <img src="<%= post.cover || theme.default_cover %>" alt="<%= post.title %>" />
+        </a>
+        <div class="recent-info">
+          <a class="recent-title" href="<%= url_for(post.path) %>" title="<%= post.title %>"><%= post.title %></a>
+          <span class="recent-date"><%= date(post.date, 'YYYY-MM-DD') %></span>
+        </div>
+      </li>
+    <% }) %>
+  </ul>
+</div>

@@ -1,0 +1,41 @@
+<section class="cyber-timeline-page">
+  <div class="timeline-header">
+    <% if (is_tag()) { %>
+      <h1 class="section-title">Tag / <%= page.tag %></h1>
+      <p class="timeline-subtitle">关于「<%= page.tag %>」的全部记忆_</p>
+    <% } else if (is_category()) { %>
+      <h1 class="section-title">Category / <%= page.category %></h1>
+      <p class="timeline-subtitle">领域展开_</p>
+    <% } else { %>
+      <h1 class="section-title">Timeline / 归档</h1>
+      <p class="timeline-subtitle">记录 Arturia 与这个世界的连线_</p>
+    <% } %>
+  </div>
+
+  <div class="timeline-container">
+    <% var lastYear = ''; %>
+    <% var cardIndex = 0; %>
+    <% page.posts.each(function(post){ %>
+      <% var currentYear = post.date.format('YYYY'); %>
+
+      <% if (currentYear !== lastYear) { %>
+        <div class="timeline-year-node">
+          <span class="year-text"><%= currentYear %></span>
+        </div>
+        <% lastYear = currentYear; %>
+      <% } %>
+
+      <% cardIndex++; %>
+      <div class="timeline-item <%= cardIndex % 2 !== 0 ? 'left' : 'right' %>">
+        <div class="timeline-node"></div>
+        <a class="timeline-card" href="<%= url_for(post.path) %>">
+          <div class="timeline-date"><i class="fas fa-calendar-day"></i> <%= post.date.format('MM-DD') %></div>
+          <h3 class="timeline-title"><%= post.title %></h3>
+          <div class="timeline-excerpt">
+            <%- truncate(strip_html(post.content), {length: 65, omission: '...'}) %>
+          </div>
+        </a>
+      </div>
+    <% }) %>
+  </div>
+</section>

@@ -1,0 +1,34 @@
+menu:
+  首页: / || fas fa-home
+  归档: /archives/ || fas fa-file-archive
+  分类: /categories/ || fas fa-th-list
+  标签: /tags/ || fas fa-tags
+  关于: /about/ || fas fa-user-alt
+  搜索: /search/ || fas fa-search
+hero:
+  slogan: "愿星轨为你指引方向_"
+
+# 首页打字机动画速度 (如 3s, 4s, 5s)
+typewriter_speed: 7s
+
+# 文章默认封面图 (当文章 Front-matter 没有 cover 字段时显示)
+default_cover: https://api.yimian.xyz/img?type=moe&size=1920x1080
+
+# 全局动态背景图库 (每日随机自动切换)
+background_images:
+  - https://api.yimian.xyz/img?type=moe&size=1920x1080
+  - https://t.mwm.moe/pc/
+
+# 背景样式参数（全息蒙版）
+background_style:
+  blur_radius: 0px
+  mask_opacity: 0
+  grid_opacity: 0
+
+# =========================================
+# 侧边栏个人卡片 (Sidebar Profile)
+# =========================================
+sidebar:
+  avatar: /img/arturia-avatar.jpg
+  author: Arturia
+  description: "万物皆有其声，我亦是如此。"

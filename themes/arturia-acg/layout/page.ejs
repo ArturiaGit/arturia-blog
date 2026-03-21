@@ -1,0 +1,41 @@
+<% if (page.type === 'tags') { %>
+<section class="glass-card tags-page" style="padding: 40px;">
+  <div class="timeline-header">
+    <h1 class="section-title">Tags / 标签</h1>
+    <p class="timeline-subtitle">被时间遗忘的线索_</p>
+  </div>
+  <div class="tags-grid">
+    <% site.tags.sort('name').forEach(function(tag){ %>
+      <a class="tag-grid-card" href="<%- url_for(tag.path) %>">
+        <span class="tag-name"><%- tag.name %></span>
+        <span class="tag-count"><%- tag.length %> 篇文章</span>
+      </a>
+    <% }) %>
+  </div>
+</section>
+<% } else if (page.type === 'categories') { %>
+<section class="glass-card categories-page" style="padding: 40px;">
+  <div class="timeline-header">
+    <h1 class="section-title">Categories / 领域</h1>
+    <p class="timeline-subtitle">星穹下的核心数据库_</p>
+  </div>
+  <div class="categories-list">
+    <% site.categories.sort('name').forEach(function(category){ %>
+      <a class="category-folder-card" href="<%- url_for(category.path) %>">
+        <div class="folder-icon"><i class="fas fa-folder-open"></i></div>
+        <div class="folder-info">
+          <h3 class="category-name"><%- category.name %></h3>
+          <span class="category-count"><%- category.length %> 份绝密档案</span>
+        </div>
+      </a>
+    <% }) %>
+  </div>
+</section>
+<% } else { %>
+<section class="page">
+  <h1 class="section-title"><%= page.title %></h1>
+  <div class="post-content">
+    <%- page.content %>
+  </div>
+</section>
+<% } %>
