@@ -68,10 +68,9 @@
     </div>
   </nav>
 
-  <% var fallbackCover = 'https://api.yimian.xyz/img?type=moe&size=1920x1080'; %>
-  <% var heroCover = (is_post() && page.cover) ? page.cover : (theme.default_cover || fallbackCover); %>
+  <% var heroCover = (is_post() && page.cover) ? page.cover : (theme.default_cover || ''); %>
   <% if (is_home()) { %>
-  <header class="hero" style="background-image: url('<%= heroCover %>');">
+  <header class="hero" <% if (heroCover) { %>style="background-image: url('<%= heroCover %>');"<% } %>>
     <div class="hero-overlay"></div>
     <div class="hero-content">
       <h1 class="hero-slogan"><span class="typewriter"><%= theme.hero.slogan %></span></h1>
@@ -83,7 +82,7 @@
   <div class="nav-spacer" style="height: 110px;"></div>
 
   <% } else { %>
-  <header class="page-hero" style="background-image: url('<%= heroCover %>');">
+  <header class="page-hero" <% if (heroCover) { %>style="background-image: url('<%= heroCover %>');"<% } %>>
     <div class="page-hero-overlay"></div>
     <div class="page-hero-inner">
       <h1><%= page.title || config.title %></h1>
@@ -113,8 +112,8 @@
     </div>
   </div>
 
-  <script src="<%= url_for('/js/search.js') %>"></script>
-  <script src="<%= url_for('/js/code-block.js') %>"></script>
+  <script defer src="<%= config.root %>js/search.js"></script>
+  <script defer src="<%= config.root %>js/code-block.js"></script>
   <script>
     (function() {
       var nav = document.querySelector('.top-nav');
@@ -153,9 +152,11 @@
     // 2. 核心修复：利用 Hexo 的 EJS 动态注入当前页面的专属封面 (若有)
     const pageCover = "<%- page.cover ? page.cover : '' %>";
 
-    // 3. 智能路由：优先显示页面专属封面，没有则显示全局轮播壁纸
-    const initialBgUrl = pageCover ? pageCover : bgList[currentIdx];
-    bg1.style.backgroundImage = `url(${initialBgUrl})`;
+    // 3. 智能路由：优先显示页面专属封面，没有则稳态回退到本地图库
+    const initialBgUrl = pageCover || bgList[currentIdx] || '';
+    if (initialBgUrl) {
+      bg1.style.backgroundImage = `url(${initialBgUrl})`;
+    }
 
     // 4. 一键轮播渐变逻辑
     if (trigger) {

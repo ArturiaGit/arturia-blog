@@ -2,7 +2,7 @@
   <% page.posts.each(function(post){ %>
     <article class="post-card post-card-horizontal">
       <a class="post-cover" href="<%= url_for(post.path) %>">
-        <img src="<%- post.cover || theme.default_cover || 'https://api.yimian.xyz/img?type=moe&size=1920x1080' %>" alt="<%= post.title %>" style="width: 100%; height: 100%; object-fit: cover;">
+        <img src="<%- post.cover || theme.default_cover || '' %>" alt="<%= post.title %>" style="width: 100%; height: 100%; object-fit: cover;">
       </a>
       <div class="post-body">
         <h2 class="post-title"><a href="<%= url_for(post.path) %>"><%= post.title %></a></h2>

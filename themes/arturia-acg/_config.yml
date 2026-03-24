@@ -12,12 +12,10 @@ hero:
 typewriter_speed: 7s
 
 # 文章默认封面图 (当文章 Front-matter 没有 cover 字段时显示)
-default_cover: https://api.yimian.xyz/img?type=moe&size=1920x1080
+default_cover: ''
 
 # 全局动态背景图库 (每日随机自动切换)
-background_images:
-  - https://api.yimian.xyz/img?type=moe&size=1920x1080
-  - https://t.mwm.moe/pc/
+background_images: []
 
 # 背景样式参数（全息蒙版）
 background_style:
