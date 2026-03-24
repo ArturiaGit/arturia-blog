@@ -707,42 +707,6 @@ a {
   overflow: auto;
 }
 
-figure.highlight {
-  background: rgba(0, 0, 0, 0.45);
-  border-radius: 12px;
-  overflow: hidden;
-}
-
-figure.highlight table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-figure.highlight td {
-  padding: 0;
-  vertical-align: top;
-}
-
-figure.highlight td.gutter,
-figure.highlight td.code {
-  background: transparent;
-}
-
-figure.highlight td.gutter {
-  padding: 14px 10px 14px 14px;
-  color: rgba(255, 255, 255, 0.6);
-  user-select: none;
-}
-
-figure.highlight td.code {
-  padding: 14px 16px 14px 0;
-}
-
-figure.highlight pre {
-  margin: 0;
-  background: transparent;
-}
-
 .post-content code {
   font-family: "Fira Code", "JetBrains Mono", monospace;
 }
