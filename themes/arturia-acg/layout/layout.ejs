@@ -142,9 +142,26 @@
     const bg2 = document.getElementById('cyber-bg-2');
     const trigger = document.getElementById('env-light-trigger');
 
-    // 1. 读取本地记忆的轮播索引
-    let currentIdx = parseInt(localStorage.getItem('arturia_local_bg_idx')) || 0;
-    if (currentIdx >= bgList.length) currentIdx = 0;
+    // 1. 严格每日自动换图：每日固定索引 + 当日手动覆盖（次日自动重置）
+    const dayMs = 24 * 60 * 60 * 1000;
+    const getTodayKey = () => {
+      const d = new Date();
+      return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+    };
+
+    const now = new Date();
+    const localMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+    const dailyIdx = Math.floor(localMidnight / dayMs) % bgList.length;
+
+    const manualDateKey = 'arturia_manual_bg_date';
+    const manualIdxKey = 'arturia_manual_bg_idx';
+    const manualDate = localStorage.getItem(manualDateKey);
+    const manualIdx = Number.parseInt(localStorage.getItem(manualIdxKey), 10);
+
+    let currentIdx = dailyIdx;
+    if (manualDate === getTodayKey() && Number.isInteger(manualIdx) && manualIdx >= 0 && manualIdx < bgList.length) {
+      currentIdx = manualIdx;
+    }
 
     let activeLayer = 1;
     let isSwitching = false; // 竞态锁
@@ -181,7 +198,8 @@
           currDiv.style.opacity = 0; // 旧画布淡出隐去
 
           activeLayer = activeLayer === 1 ? 2 : 1;
-          localStorage.setItem('arturia_local_bg_idx', currentIdx);
+          localStorage.setItem(manualDateKey, getTodayKey());
+          localStorage.setItem(manualIdxKey, String(currentIdx));
 
           // 动画时间为 0.8s，等待动画结束后解锁
           setTimeout(() => { isSwitching = false; }, 800);
