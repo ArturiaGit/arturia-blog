@@ -143,7 +143,7 @@
     const bg2 = document.getElementById('cyber-bg-2');
     const trigger = document.getElementById('env-light-trigger');
 
-    // 1. 严格每日自动换图：每日固定索引 + 当日手动覆盖（次日自动重置）
+    // 1. 每日背景锁定：当天固定背景 URL，次日才重新计算（新增图片当天不影响）
     const dayMs = 24 * 60 * 60 * 1000;
     const getTodayKey = () => {
       const d = new Date();
@@ -154,14 +154,24 @@
     const localMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
     const dailyIdx = Math.floor(localMidnight / dayMs) % bgList.length;
 
-    const manualDateKey = 'arturia_manual_bg_date';
-    const manualIdxKey = 'arturia_manual_bg_idx';
-    const manualDate = localStorage.getItem(manualDateKey);
-    const manualIdx = Number.parseInt(localStorage.getItem(manualIdxKey), 10);
+    const dailyDateKey = 'arturia_daily_bg_date';
+    const dailyBgUrlKey = 'arturia_daily_bg_url';
+    const todayKey = getTodayKey();
 
-    let currentIdx = dailyIdx;
-    if (manualDate === getTodayKey() && Number.isInteger(manualIdx) && manualIdx >= 0 && manualIdx < bgList.length) {
-      currentIdx = manualIdx;
+    const savedDate = localStorage.getItem(dailyDateKey);
+    const savedBgUrl = localStorage.getItem(dailyBgUrlKey);
+
+    let currentBgUrl = '';
+    if (savedDate === todayKey && savedBgUrl) {
+      currentBgUrl = savedBgUrl;
+    } else {
+      currentBgUrl = bgList[dailyIdx] || '';
+      localStorage.setItem(dailyDateKey, todayKey);
+      localStorage.setItem(dailyBgUrlKey, currentBgUrl);
+    }
+
+    if (!currentBgUrl) {
+      currentBgUrl = bgList[0] || '';
     }
 
     let activeLayer = 1;
@@ -170,8 +180,8 @@
     // 2. 核心修复：利用 Hexo 的 EJS 动态注入当前页面的专属封面 (若有)
     const pageCover = "<%- page.cover ? page.cover : '' %>";
 
-    // 3. 智能路由：优先显示页面专属封面，没有则稳态回退到本地图库
-    const initialBgUrl = pageCover || bgList[currentIdx] || '';
+    // 3. 智能路由：优先显示页面专属封面，没有则使用当天锁定背景
+    const initialBgUrl = pageCover || currentBgUrl || '';
     if (initialBgUrl) {
       bg1.style.backgroundImage = `url(${initialBgUrl})`;
     }
@@ -183,9 +193,9 @@
         if (isSwitching) return; // 防抖，防止疯狂点击
         isSwitching = true;
 
-        // 计算下一张全局壁纸（点击即打破文章封面限制）
-        currentIdx = (currentIdx + 1) % bgList.length;
-        const nextBgUrl = bgList[currentIdx];
+        // 计算下一张全局壁纸（当天锁定为手动结果）
+        const currentIdx = bgList.indexOf(currentBgUrl);
+        const nextBgUrl = bgList[(currentIdx + 1 + bgList.length) % bgList.length];
 
         const nextDiv = activeLayer === 1 ? bg2 : bg1;
         const currDiv = activeLayer === 1 ? bg1 : bg2;
@@ -199,8 +209,9 @@
           currDiv.style.opacity = 0; // 旧画布淡出隐去
 
           activeLayer = activeLayer === 1 ? 2 : 1;
-          localStorage.setItem(manualDateKey, getTodayKey());
-          localStorage.setItem(manualIdxKey, String(currentIdx));
+          currentBgUrl = nextBgUrl;
+          localStorage.setItem(dailyDateKey, todayKey);
+          localStorage.setItem(dailyBgUrlKey, currentBgUrl);
 
           // 动画时间为 0.8s，等待动画结束后解锁
           setTimeout(() => { isSwitching = false; }, 800);
