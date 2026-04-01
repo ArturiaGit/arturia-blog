@@ -7,9 +7,11 @@
     <span class="meta-divider">|</span>
     <span class="meta-item"><i class="fas fa-calendar-alt"></i> 发布于: <%= date(page.date, 'YYYY-MM-DD') %></span>
   </div>
-  <div class="post-content">
+  <% var glossaryMap = page.glossary || {}; %>
+  <div class="post-content" data-glossary-enabled="<%= Object.keys(glossaryMap).length ? '1' : '0' %>">
     <%- page.content %>
   </div>
+  <script id="post-glossary-data" type="application/json"><%- JSON.stringify(glossaryMap).replace(/</g, '\\u003c') %></script>
 
   <div class="post-copyright-card glass-card">
     <div class="copyright-item"><i class="fas fa-user-circle"></i> <span>作者：</span>Arturia</div>
