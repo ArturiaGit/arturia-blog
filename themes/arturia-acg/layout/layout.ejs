@@ -45,7 +45,7 @@
           <% if (label !== '环境光') { %>
           <li>
             <% if (label === '搜索') { %>
-              <a id="nav-search-btn" href="javascript:void(0);">
+              <a id="nav-search-btn" href="javascript:void(0);" aria-haspopup="dialog" aria-expanded="false">
                 <span class="nav-icon"><i class="<%= icon %>"></i></span>
                 <span><%= label %></span>
               </a>
@@ -101,16 +101,171 @@
     </div>
   </main>
 
+  <%
+    var searchPath = (((config.search && config.search.path) ? config.search.path : 'search.json') + '').replace(/^\/+/, '');
+    var searchRecentPosts = [];
+    site.posts.sort('date', -1).limit(5).forEach(function(post) {
+      searchRecentPosts.push({
+        title: post.title,
+        url: url_for(post.path),
+        cover: post.cover || theme.default_cover || '',
+        date: date(post.date, 'YYYY-MM-DD')
+      });
+    });
+
+    var searchHotTags = [];
+    site.tags.sort('length', -1).limit(8).forEach(function(tag) {
+      searchHotTags.push({
+        name: tag.name,
+        count: tag.length,
+        url: url_for(tag.path)
+      });
+    });
+
+    var searchHotCategories = [];
+    site.categories.sort('length', -1).limit(6).forEach(function(category) {
+      searchHotCategories.push({
+        name: category.name,
+        count: category.length,
+        url: url_for(category.path)
+      });
+    });
+
+    var searchMetaMap = {};
+    site.posts.forEach(function(post) {
+      searchMetaMap[url_for(post.path)] = {
+        date: date(post.date, 'YYYY-MM-DD'),
+        cover: post.cover || theme.default_cover || '',
+        excerpt: strip_html(post.excerpt || post.content || '').replace(/\s+/g, ' ').trim().slice(0, 160)
+      };
+    });
+  %>
   <div class="search-overlay" id="search-overlay"></div>
-  <div class="search-panel" id="search-panel" aria-hidden="true">
+  <div
+    class="search-panel"
+    id="search-panel"
+    aria-hidden="true"
+    aria-modal="true"
+    role="dialog"
+    data-search-path="<%= url_for('/' + searchPath) %>"
+  >
     <div class="search-container">
-      <div class="search-box">
-        <span class="search-icon"><i class="fas fa-satellite-dish"></i></span>
-        <input id="search-input" class="search-input" type="text" placeholder="搜索文章 / 标签 / 分类" autocomplete="off" />
+      <div class="search-shell">
+        <div class="search-header">
+          <div class="search-heading">
+            <span class="search-kicker">STAR TRAIL RETRIEVAL</span>
+            <h2 class="search-title">星轨检索舱</h2>
+            <p class="search-description">从标题、标签到正文片段，统一扫描你整座博客的内容轨迹。</p>
+          </div>
+          <button class="search-close" id="search-close" type="button" aria-label="关闭搜索">
+            <i class="fas fa-xmark"></i>
+          </button>
+        </div>
+
+        <div class="search-box">
+          <span class="search-icon"><i class="fas fa-satellite-dish"></i></span>
+          <input
+            id="search-input"
+            class="search-input"
+            type="text"
+            placeholder="搜索文章 / 标签 / 分类 / 关键词"
+            autocomplete="off"
+            spellcheck="false"
+          />
+        </div>
+
+        <div class="search-toolbar">
+          <div class="search-status" id="search-status">
+            <span class="search-status-label" id="search-status-label">检索舱待命</span>
+            <span class="search-status-text" id="search-status-text">按下 Ctrl/⌘ + K 或直接输入关键词开始搜索</span>
+          </div>
+          <div class="search-shortcuts">
+            <span class="search-shortcut"><kbd>Ctrl</kbd><span>/</span><kbd>⌘</kbd><span>+</span><kbd>K</kbd></span>
+            <span class="search-shortcut"><kbd>Esc</kbd><span>关闭</span></span>
+            <span class="search-shortcut"><kbd>↑</kbd><span>/</span><kbd>↓</kbd><span>导航</span></span>
+          </div>
+        </div>
+
+        <div class="search-content">
+          <div class="search-view search-default-view" id="search-default-view">
+            <div class="search-default-grid">
+              <section class="search-default-card search-intro-card">
+                <span class="search-card-kicker">SCAN MODES</span>
+                <h3>不只是找文章，而是直接检索整套内容体系</h3>
+                <p>搜索会优先命中标题与标签，再向正文延展，并自动提取最接近命中词的上下文片段。</p>
+                <div class="search-feature-list">
+                  <span class="search-feature-pill"><i class="fas fa-bullseye"></i> 标题高权重命中</span>
+                  <span class="search-feature-pill"><i class="fas fa-tags"></i> 标签 / 分类联动</span>
+                  <span class="search-feature-pill"><i class="fas fa-wand-magic-sparkles"></i> 命中片段摘要</span>
+                </div>
+              </section>
+
+              <section class="search-default-card">
+                <div class="search-card-header">
+                  <span class="search-card-kicker">LATEST LOGS</span>
+                  <h3>最近更新</h3>
+                </div>
+                <div class="search-suggestion-list">
+                  <% searchRecentPosts.forEach(function(post) { %>
+                    <a class="search-suggestion-item" href="<%= post.url %>">
+                      <% if (post.cover) { %>
+                        <span class="search-suggestion-cover">
+                          <img src="<%= post.cover %>" alt="<%= post.title %>" />
+                        </span>
+                      <% } %>
+                      <span class="search-suggestion-main">
+                        <span class="search-suggestion-title"><%= post.title %></span>
+                        <span class="search-suggestion-meta"><i class="far fa-calendar-alt"></i><%= post.date %></span>
+                      </span>
+                    </a>
+                  <% }) %>
+                </div>
+              </section>
+            </div>
+
+            <div class="search-default-grid search-default-grid-secondary">
+              <section class="search-default-card">
+                <div class="search-card-header">
+                  <span class="search-card-kicker">HOT TAGS</span>
+                  <h3>热门标签</h3>
+                </div>
+                <div class="search-chip-cloud" id="search-quick-filters">
+                  <% searchHotTags.forEach(function(tag) { %>
+                    <button class="search-chip-button" type="button" data-search-term="<%= tag.name %>">
+                      <i class="fas fa-hashtag"></i>
+                      <span><%= tag.name %></span>
+                      <small><%= tag.count %></small>
+                    </button>
+                  <% }) %>
+                </div>
+              </section>
+
+              <section class="search-default-card">
+                <div class="search-card-header">
+                  <span class="search-card-kicker">TOP CATEGORIES</span>
+                  <h3>分类入口</h3>
+                </div>
+                <div class="search-chip-cloud">
+                  <% searchHotCategories.forEach(function(category) { %>
+                    <button class="search-chip-button is-category" type="button" data-search-term="<%= category.name %>">
+                      <i class="fas fa-folder-open"></i>
+                      <span><%= category.name %></span>
+                      <small><%= category.count %></small>
+                    </button>
+                  <% }) %>
+                </div>
+              </section>
+            </div>
+          </div>
+
+          <div class="search-view search-results-view" id="search-results-view" hidden>
+            <ul id="search-results" class="search-results" role="listbox" aria-label="搜索结果"></ul>
+          </div>
+        </div>
       </div>
-      <ul id="search-results" class="search-results"></ul>
     </div>
   </div>
+  <script id="search-post-meta" type="application/json"><%- JSON.stringify(searchMetaMap) %></script>
 
   <script defer src="<%= config.root %>js/search.js"></script>
   <script defer src="<%= config.root %>js/code-block.js"></script>
@@ -143,7 +298,7 @@
     const bg2 = document.getElementById('cyber-bg-2');
     const trigger = document.getElementById('env-light-trigger');
 
-    // 1. 每日背景锁定：当天固定背景 URL，次日才重新计算（新增图片当天不影响）
+    // 1. 姣忔棩鑳屾櫙閿佸畾锛氬綋澶╁浐瀹氳儗鏅?URL锛屾鏃ユ墠閲嶆柊璁＄畻锛堟柊澧炲浘鐗囧綋澶╀笉褰卞搷锛?
     const dayMs = 24 * 60 * 60 * 1000;
     const getTodayKey = () => {
       const d = new Date();
@@ -175,45 +330,45 @@
     }
 
     let activeLayer = 1;
-    let isSwitching = false; // 竞态锁
+    let isSwitching = false; // 绔炴€侀攣
 
-    // 2. 核心修复：利用 Hexo 的 EJS 动态注入当前页面的专属封面 (若有)
+    // 2. 鏍稿績淇锛氬埄鐢?Hexo 鐨?EJS 鍔ㄦ€佹敞鍏ュ綋鍓嶉〉闈㈢殑涓撳睘灏侀潰 (鑻ユ湁)
     const pageCover = "<%- page.cover ? page.cover : '' %>";
 
-    // 3. 智能路由：优先显示页面专属封面，没有则使用当天锁定背景
+    // 3. 鏅鸿兘璺敱锛氫紭鍏堟樉绀洪〉闈笓灞炲皝闈紝娌℃湁鍒欎娇鐢ㄥ綋澶╅攣瀹氳儗鏅?
     const initialBgUrl = pageCover || currentBgUrl || '';
     if (initialBgUrl) {
       bg1.style.backgroundImage = `url(${initialBgUrl})`;
     }
 
-    // 4. 一键轮播渐变逻辑
+    // 4. 涓€閿疆鎾笎鍙橀€昏緫
     if (trigger) {
       trigger.addEventListener('click', (e) => {
         e.preventDefault();
-        if (isSwitching) return; // 防抖，防止疯狂点击
+        if (isSwitching) return; // 闃叉姈锛岄槻姝㈢柉鐙傜偣鍑?
         isSwitching = true;
 
-        // 计算下一张全局壁纸（当天锁定为手动结果）
+        // 璁＄畻涓嬩竴寮犲叏灞€澹佺焊锛堝綋澶╅攣瀹氫负鎵嬪姩缁撴灉锛?
         const currentIdx = bgList.indexOf(currentBgUrl);
         const nextBgUrl = bgList[(currentIdx + 1 + bgList.length) % bgList.length];
 
         const nextDiv = activeLayer === 1 ? bg2 : bg1;
         const currDiv = activeLayer === 1 ? bg1 : bg2;
 
-        // 隐式预加载：无白屏、无闪烁、无重叠
+        // 闅愬紡棰勫姞杞斤細鏃犵櫧灞忋€佹棤闂儊銆佹棤閲嶅彔
         const img = new Image();
         img.src = nextBgUrl;
         img.onload = () => {
           nextDiv.style.backgroundImage = `url(${nextBgUrl})`;
-          nextDiv.style.opacity = 1; // 新画布淡入亮起
-          currDiv.style.opacity = 0; // 旧画布淡出隐去
+          nextDiv.style.opacity = 1; // 鏂扮敾甯冩贰鍏ヤ寒璧?
+          currDiv.style.opacity = 0; // 鏃х敾甯冩贰鍑洪殣鍘?
 
           activeLayer = activeLayer === 1 ? 2 : 1;
           currentBgUrl = nextBgUrl;
           localStorage.setItem(dailyDateKey, todayKey);
           localStorage.setItem(dailyBgUrlKey, currentBgUrl);
 
-          // 动画时间为 0.8s，等待动画结束后解锁
+          // 鍔ㄧ敾鏃堕棿涓?0.8s锛岀瓑寰呭姩鐢荤粨鏉熷悗瑙ｉ攣
           setTimeout(() => { isSwitching = false; }, 800);
         };
 

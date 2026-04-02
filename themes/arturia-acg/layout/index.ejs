@@ -1,3 +1,27 @@
+<%
+  function decodeEntities(text) {
+    return String(text || '')
+      .replace(/&amp;/g, '&')
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>')
+      .replace(/&quot;/g, '"')
+      .replace(/&apos;/g, "'")
+      .replace(/&nbsp;/g, ' ')
+      .replace(/&#x([0-9a-fA-F]+);/g, function(_, hex) { return String.fromCharCode(parseInt(hex, 16)); })
+      .replace(/&#([0-9]+);/g, function(_, code) { return String.fromCharCode(parseInt(code, 10)); });
+  }
+
+  function normalizedExcerpt(post) {
+    var source = post.content || post.excerpt || '';
+    return decodeEntities(strip_html(source))
+      .replace(/\[+/g, '')
+      .replace(/\]+/g, '')
+      .replace(/\s+/g, ' ')
+      .trim()
+      .slice(0, 140) + '...';
+  }
+%>
+
 <section class="post-list">
   <% page.posts.each(function(post){ %>
     <article class="post-card post-card-horizontal">
@@ -21,7 +45,7 @@
           <% } %>
         </div>
 
-        <p class="post-excerpt"><%- post.excerpt || strip_html(post.content).substring(0, 120) + '...' %></p>
+        <p class="post-excerpt"><%= normalizedExcerpt(post) %></p>
       </div>
     </article>
   <% }) %>
