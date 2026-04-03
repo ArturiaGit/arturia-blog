@@ -923,27 +923,6 @@ a {
   backdrop-filter: blur(12px);
 }
 
-@media (max-width: 768px) {
-  .nav-inner {
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .nav-menu {
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  .main {
-    padding-top: 20px;
-  }
-
-  .hero-arrow {
-    width: 40px;
-    height: 40px;
-  }
-}
-
 body.search-open {
   overflow: hidden !important;
 }
@@ -2731,217 +2710,6 @@ body {
 }
 
 /* =========================================
-   移动端全息兼容化重构 (Responsive Typography & Layout)
-   ========================================= */
-@media (max-width: 768px) {
-  /* 1. 标题与字体全局压榨：在亮色/暗色背景下保持可读性 */
-  body {
-    font-size: 15px; /* 全局字号稍微收缩，提升移动端精致感 */
-  }
-
-  /* 2. 导航栏重排：从 Space-between 改为 Center 堆叠 */
-  .nav-inner {
-    flex-direction: column !important; /* 强制垂直堆叠 */
-    gap: 12px !important;
-    padding: 15px 10px !important;
-    align-items: center !important;
-  }
-
-  .logo {
-    font-size: 20px !important;
-    margin-bottom: 5px !important;
-  }
-
-  .nav-menu {
-    flex-wrap: wrap !important; /* 允许菜单项换行 */
-    justify-content: center !important; /* 菜单项在中间汇合 */
-    gap: 8px !important;
-    padding: 0 !important;
-  }
-
-  .nav-menu a {
-    padding: 6px 10px !important;
-    font-size: 13px !important;
-    gap: 6px !important;
-  }
-
-  .nav-icon {
-    width: 28px !important;
-    height: 28px !important;
-    font-size: 12px !important;
-  }
-
-  /* 3. Hero 区域：压榨 Epiphany Slogan 体积 */
-  .hero-slogan .typewriter {
-    font-size: clamp(20px, 6vw, 40px) !important; /* 核心维持史诗感，但限制最大体积 */
-    letter-spacing: 2px !important; /* 缩小字距，防止溢出 */
-  }
-
-  /* 4. 主布局重构：Content 与 Sidebar 的垂直生命周期 */
-  .layout-shell {
-    flex-direction: column !important; /* 强制双栏垂直堆叠 */
-    gap: 20px !important;
-    padding: 20px 10px !important;
-  }
-
-  .content-area,
-  .sidebar-area {
-    flex: 1 1 auto !important; /* 允许两个区域各占满宽度 */
-    width: 100% !important;
-  }
-
-  /* 5. 首页卡片重构：横向 -> 纵向 (核心防御) */
-  .post-list {
-    gap: 18px !important;
-  }
-
-  .post-card-horizontal {
-    flex-direction: column !important; /* 强制卡片内部垂直 */
-    height: auto !important; /* 卡片高度不再硬编码 */
-  }
-
-  /* nth-child(even) 不再 row-reverse，全部回归同一时空 */
-  .post-card-horizontal:nth-child(even) {
-    flex-direction: column !important;
-  }
-
-  /* 封面图：移至最上方并占满宽度 */
-  .post-card-horizontal .post-cover {
-    flex: none !important;
-    width: 100% !important;
-    height: 200px !important; /* 移动端固定高度 */
-    border-radius: 16px 16px 0 0 !important; /* 修正圆角：只有上方需要圆角 */
-  }
-
-  .post-card-horizontal .post-cover img {
-    border-radius: 16px 16px 0 0 !important;
-  }
-
-  /* 卡片主体：压榨 Padding */
-  .post-card-horizontal .post-body {
-    flex: none !important;
-    width: 100% !important;
-    padding: 20px !important; /* 缩小Padding，释放文字空间 */
-    justify-content: flex-start !important;
-  }
-
-  /* 6. 文章详情页：压榨 Margin 与 Padding */
-  .post-detail {
-    margin-top: -60px !important; /* 减小 negative margin */
-    padding: 30px 15px !important; /* 极度压榨左右Padding */
-    border-radius: 20px !important;
-  }
-
-  .post-detail-meta {
-    justify-content: center !important; /* Meta 在中间对齐 */
-  }
-
-  .post-content h2 { font-size: 1.3em !important; }
-  .post-content h3 { font-size: 1.1em !important; }
-  .post-content { font-size: 15px !important; }
-
-  /* 7. 侧边栏：修复头像和数据统计在堆叠下的排版 */
-  .author-card .author-name { font-size: 16px !important; }
-  .author-card .author-desc { font-size: 12px !important; }
-  .author-stats { gap: 10px !important; }
-  .stat-num { font-size: 14px !important; }
-  .stat-label { font-size: 11px !important; }
-}
-
-# 极限防御：针对 480px 以下小屏幕的微调
-@media (max-width: 480px) {
-  .hero-slogan .typewriter {
-    font-size: 20px !important;
-    letter-spacing: 1px !important;
-  }
-}
-
-/* =========================================
-   🚀 极客架构终极防御协议：移动端全息兼容层重构 (System Patch V3)
-   ========================================= */
-
-@media (max-width: 768px) {
-  /* 1. 终极视口防逃逸锁 (Viewport Lock) - 修复右侧留白与背景断裂 */
-  html, body {
-    width: 100vw !important;
-    max-width: 100vw !important;
-    overflow-x: hidden !important;
-    position: relative;
-  }
-
-  /* 2. 导航栏重构：废弃换行，采用极简横向滑动 (Sleek Scroll) - 修复遮挡问题 */
-  .nav-inner {
-    flex-direction: column !important;
-    padding: 10px !important;
-    gap: 10px !important;
-  }
-  .nav-menu {
-    flex-wrap: nowrap !important; /* 核心防御：严禁换行 */
-    justify-content: flex-start !important;
-    width: 100% !important;
-    overflow-x: auto !important; /* 开启横向极客滑动 */
-    -webkit-overflow-scrolling: touch; /* 丝滑阻尼 */
-    padding-bottom: 4px !important;
-    gap: 12px !important;
-  }
-  /* 隐藏菜单的滚动条，保留滑动功能，维持全息美学 */
-  .nav-menu::-webkit-scrollbar {
-    height: 0px !important;
-    display: none !important;
-  }
-  .nav-menu a {
-    flex-shrink: 0 !important; /* 防止菜单胶囊被挤压变形 */
-    padding: 6px 14px !important;
-  }
-
-  /* 3. 布局骨架强制满宽填充 - 修复侧边栏头像卡片塌陷与左偏 */
-  .layout-shell {
-    width: 100% !important;
-    max-width: 100vw !important;
-    overflow-x: hidden !important; /* 容器级防线 */
-    box-sizing: border-box !important;
-    padding: 15px 10px !important;
-  }
-  .content-area,
-  .sidebar-area {
-    flex: 0 0 100% !important; /* 核心防御：强制占据 100% 空间，拒绝塌陷 */
-    width: 100% !important;
-    max-width: 100% !important;
-    margin: 0 !important;
-  }
-  .sidebar-card {
-    width: 100% !important;
-    box-sizing: border-box !important;
-  }
-
-  /* 4. 排雷：处理隐藏的宽度炸弹 (Width Bombs) */
-  /* 炸弹A: 首页打字机动画过宽溢出 */
-  .hero-slogan .typewriter {
-    max-width: 90vw !important;
-    white-space: nowrap !important;
-    overflow: hidden !important; /* 强制截断，保住视口 */
-    text-overflow: clip !important;
-  }
-  /* 炸弹B: 分类机柜在极窄屏幕的溢出 */
-  .categories-list {
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)) !important;
-  }
-  /* 炸弹C: 详情页卡片上浮间距优化 */
-  .post-detail {
-    margin-top: -40px !important; /* 减轻移动端的遮盖感 */
-    width: 100% !important;
-    box-sizing: border-box !important;
-  }
-  /* 炸弹D: Markdown 代码块和表格溢出 */
-  .post-content pre,
-  .post-content table {
-    max-width: 100% !important;
-    overflow-x: auto !important;
-    -webkit-overflow-scrolling: touch;
-  }
-}
-
-/* =========================================
    Arturia 极客代码控制台：终极稳定版
    ========================================= */
 
@@ -3205,6 +2973,623 @@ figure.highlight .class .title { color: #61afef; }
   font-size: 13px;
   line-height: 1.65;
   color: var(--text-muted);
+}
+
+.mobile-author-cabin {
+  display: none;
+}
+
+.mobile-author-cabin-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.mobile-author-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 22px;
+  object-fit: cover;
+  flex: 0 0 auto;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.24);
+}
+
+.mobile-author-main {
+  min-width: 0;
+}
+
+.mobile-author-kicker {
+  display: inline-block;
+  font-size: 11px;
+  letter-spacing: 0.24em;
+  color: rgba(136, 192, 208, 0.82);
+  text-transform: uppercase;
+}
+
+.mobile-author-name {
+  margin-top: 8px;
+  font-size: 20px;
+  color: #ffffff;
+}
+
+.mobile-author-description {
+  margin-top: 8px;
+  color: rgba(226, 232, 240, 0.7);
+  line-height: 1.7;
+  font-size: 14px;
+}
+
+.mobile-author-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.mobile-author-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 10px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  text-align: center;
+}
+
+.mobile-author-stat-num {
+  color: #56f3ff;
+  font-family: "JetBrains Mono", "Fira Code", monospace;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.mobile-author-stat-label {
+  color: rgba(226, 232, 240, 0.62);
+  font-size: 12px;
+}
+
+@media (max-width: 768px) {
+  html,
+  body {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  body {
+    font-size: 15px;
+  }
+
+  .top-nav {
+    background: linear-gradient(180deg, rgba(5, 9, 18, 0.86), rgba(5, 9, 18, 0.68));
+    backdrop-filter: blur(18px) saturate(120%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .nav-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: calc(12px + env(safe-area-inset-top, 0px)) 12px 10px;
+  }
+
+  .logo {
+    font-size: 18px;
+    max-width: 100%;
+  }
+
+  .nav-menu {
+    width: 100%;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    gap: 10px;
+    overflow-x: auto;
+    padding: 0 2px 4px;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x proximity;
+  }
+
+  .nav-menu::-webkit-scrollbar {
+    display: none;
+  }
+
+  .nav-menu li,
+  .nav-menu a {
+    scroll-snap-align: start;
+  }
+
+  .nav-menu a {
+    flex-shrink: 0;
+    gap: 8px;
+    padding: 8px 12px;
+    font-size: 13px;
+    white-space: nowrap;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .nav-icon {
+    width: 30px;
+    height: 30px;
+    font-size: 12px;
+  }
+
+  .hero {
+    height: 56svh;
+    min-height: 420px;
+    align-items: flex-end;
+    justify-content: flex-start;
+    padding: 0 18px 68px;
+    text-align: left;
+  }
+
+  .hero-content {
+    width: min(100%, 420px);
+    padding: 0;
+  }
+
+  .hero-slogan {
+    font-size: clamp(22px, 8vw, 34px);
+    line-height: 1.25;
+  }
+
+  .hero-slogan .typewriter {
+    max-width: 100%;
+    white-space: normal;
+    border-right: none;
+    animation: none;
+    padding-right: 0;
+  }
+
+  .hero-arrow {
+    bottom: 16px;
+    width: 38px;
+    height: 38px;
+  }
+
+  .page-hero {
+    height: 34svh;
+    min-height: 220px;
+    align-items: flex-end;
+    justify-content: flex-start;
+    padding: 84px 18px 28px;
+    text-align: left;
+  }
+
+  .page-hero-inner {
+    width: 100%;
+  }
+
+  .page-hero-inner h1 {
+    font-size: clamp(24px, 7vw, 32px);
+  }
+
+  .nav-spacer {
+    height: 92px !important;
+  }
+
+  .main {
+    padding: 20px 12px 56px;
+  }
+
+  .layout-shell {
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .content-area,
+  .sidebar-area {
+    flex: 1 1 auto;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .sidebar-area {
+    order: 2;
+  }
+
+  body.page-post .sidebar-area {
+    display: none;
+  }
+
+  body.page-home .sidebar-area .recent-card {
+    display: none;
+  }
+
+  body.page-home .sidebar-area .sidebar-card,
+  body.page-archive .sidebar-area .sidebar-card,
+  body.page-category .sidebar-area .sidebar-card,
+  body.page-tag .sidebar-area .sidebar-card {
+    padding: 18px;
+    border-radius: 22px;
+  }
+
+  .post-list {
+    gap: 18px;
+  }
+
+  .post-card,
+  .post-card-horizontal {
+    border-radius: 22px;
+  }
+
+  .post-card-horizontal,
+  .post-card-horizontal:nth-child(even) {
+    flex-direction: column;
+    height: auto;
+    min-height: 0;
+  }
+
+  .post-card-horizontal .post-cover {
+    flex: none;
+    width: 100%;
+    height: clamp(180px, 46vw, 220px);
+  }
+
+  .post-card-horizontal .post-cover img,
+  .post-card-horizontal:nth-child(even) .post-cover img,
+  .post-card-horizontal:nth-child(odd) .post-cover img {
+    border-radius: 22px 22px 0 0;
+  }
+
+  .post-card-horizontal .post-body {
+    width: 100%;
+    min-width: 0;
+    padding: 18px !important;
+    gap: 12px !important;
+  }
+
+  .post-card-horizontal .post-body .post-title {
+    margin: 0 !important;
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+  }
+
+  .post-card-horizontal .post-body .post-title a {
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    font-size: 20px;
+    line-height: 1.35;
+  }
+
+  .post-card-horizontal .post-body .post-meta {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+    margin: 0 !important;
+    overflow: visible !important;
+  }
+
+  .post-card-horizontal .post-body .post-meta .meta-divider {
+    display: none !important;
+  }
+
+  .post-card-horizontal .post-body .post-meta .meta-item {
+    max-width: 100%;
+    padding: 4px 10px !important;
+    font-size: 12px;
+  }
+
+  .post-card-horizontal .post-body .post-excerpt {
+    margin: 0 !important;
+    font-size: 14px;
+    line-height: 1.72;
+    -webkit-line-clamp: 2 !important;
+  }
+
+  .post-detail {
+    margin-top: -44px;
+    width: 100%;
+    padding: 24px 18px 28px;
+    border-radius: 24px;
+    box-sizing: border-box;
+  }
+
+  .post-detail > .post-title {
+    font-size: clamp(24px, 7vw, 30px);
+    line-height: 1.25;
+  }
+
+  .post-detail-meta {
+    gap: 8px;
+    margin: 16px 0 20px;
+  }
+
+  .post-detail-meta .meta-divider {
+    display: none;
+  }
+
+  .post-detail-meta .meta-item {
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+
+  .post-content {
+    font-size: 15px !important;
+    line-height: 1.85;
+  }
+
+  .post-content h1::before,
+  .post-content h2::before,
+  .post-content h3::before {
+    display: none;
+  }
+
+  .post-content h1 {
+    font-size: 1.55em;
+  }
+
+  .post-content h2 {
+    font-size: 1.35em !important;
+  }
+
+  .post-content h3 {
+    font-size: 1.15em !important;
+  }
+
+  .post-content blockquote {
+    margin: 1.25em 0;
+    padding: 14px 16px;
+  }
+
+  .post-content ul,
+  .post-content ol {
+    padding-left: 22px;
+  }
+
+  .post-content p code,
+  .post-content li code {
+    word-break: break-all;
+  }
+
+  .post-content pre,
+  .post-content table {
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .post-copyright-card {
+    display: none;
+  }
+
+  .copyright-tags {
+    margin-top: 14px;
+  }
+
+  .mobile-author-cabin {
+    display: block;
+    margin-top: 18px;
+    padding: 18px;
+    border-radius: 22px;
+  }
+
+  .post-nav-card {
+    margin-top: 18px;
+    padding: 0 !important;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+  }
+
+  .post-nav-card .nav-item {
+    min-height: 120px;
+    height: 120px;
+    border-radius: 20px;
+  }
+
+  .post-nav-card .nav-content {
+    padding: 18px 16px;
+    justify-content: flex-end;
+  }
+
+  .post-nav-card .nav-title {
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
+  .post-nav-card .nav-excerpt {
+    display: none !important;
+  }
+
+  .related-posts-card {
+    display: none;
+  }
+
+  .page,
+  .tags-page {
+    padding: 20px 16px;
+    border-radius: 22px;
+  }
+
+  .archive-list li {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    padding: 14px 16px;
+    border-radius: 20px;
+  }
+
+  .tag-post-card {
+    flex-direction: column;
+  }
+
+  .tag-post-cover {
+    width: 100%;
+    height: 180px;
+  }
+
+  .tag-post-content {
+    padding: 18px;
+  }
+
+  .categories-list {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    margin-top: 24px;
+  }
+
+  .category-folder-card {
+    padding: 20px;
+    gap: 16px;
+  }
+
+  .folder-icon {
+    margin-right: 0;
+    font-size: 28px;
+  }
+
+  .category-name {
+    font-size: 18px;
+  }
+
+  .search-panel {
+    top: max(12px, env(safe-area-inset-top, 0px));
+    bottom: 12px;
+    width: calc(100% - 12px);
+    max-height: calc(100svh - 24px - env(safe-area-inset-top, 0px));
+  }
+
+  .search-shell {
+    border-radius: 24px;
+  }
+
+  .search-header {
+    padding: 18px 18px 14px;
+    gap: 16px;
+  }
+
+  .search-description {
+    display: none;
+  }
+
+  .search-box {
+    margin: 0 18px;
+    padding: 14px 14px;
+  }
+
+  .search-toolbar {
+    padding: 12px 18px 0;
+  }
+
+  .search-status {
+    width: 100%;
+  }
+
+  .search-content {
+    padding: 16px 18px 18px;
+  }
+
+  .search-intro-card {
+    display: none;
+  }
+
+  .search-default-grid + .search-default-grid {
+    margin-top: 12px;
+  }
+
+  .search-suggestion-item:nth-child(n + 4) {
+    display: none;
+  }
+
+  .search-chip-cloud {
+    gap: 8px;
+  }
+
+  .search-chip-button {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+
+  .search-result-link {
+    gap: 12px;
+    padding: 14px;
+  }
+
+  .search-result-cover {
+    width: 88px;
+    min-width: 88px;
+    height: 70px;
+  }
+
+  .search-result-title {
+    font-size: 16px;
+  }
+
+  .search-result-snippet {
+    -webkit-line-clamp: 3;
+    font-size: 13px;
+  }
+
+  .search-result-meta {
+    gap: 6px;
+  }
+
+  .search-result-chip {
+    padding: 5px 8px;
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero {
+    min-height: 360px;
+    padding-bottom: 60px;
+  }
+
+  .page-hero {
+    min-height: 200px;
+    padding: 78px 16px 24px;
+  }
+
+  .main {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .post-card-horizontal .post-cover {
+    height: 172px;
+  }
+
+  .post-detail {
+    padding: 22px 16px 24px;
+  }
+
+  .mobile-author-cabin-head {
+    align-items: flex-start;
+  }
+
+  .mobile-author-stats {
+    gap: 8px;
+  }
+
+  .search-box,
+  .search-header,
+  .search-toolbar,
+  .search-content {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .search-result-link {
+    flex-direction: column;
+  }
+
+  .search-result-cover {
+    width: 100%;
+    min-width: 100%;
+    height: 136px;
+  }
 }
 
 @media (max-width: 768px) {

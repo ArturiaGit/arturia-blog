@@ -27,6 +27,31 @@
     <% } %>
   </div>
 
+  <div class="mobile-author-cabin glass-card" aria-label="作者信息">
+    <div class="mobile-author-cabin-head">
+      <img src="<%- url_for(theme.sidebar.avatar) %>" alt="<%= theme.sidebar.author %>" class="mobile-author-avatar">
+      <div class="mobile-author-main">
+        <span class="mobile-author-kicker">AUTHOR CABIN</span>
+        <h3 class="mobile-author-name"><%= theme.sidebar.author %></h3>
+        <p class="mobile-author-description"><%= theme.sidebar.description %></p>
+      </div>
+    </div>
+    <div class="mobile-author-stats">
+      <div class="mobile-author-stat">
+        <span class="mobile-author-stat-num"><%= site.posts.length %></span>
+        <span class="mobile-author-stat-label">文章</span>
+      </div>
+      <div class="mobile-author-stat">
+        <span class="mobile-author-stat-num"><%= site.categories.length %></span>
+        <span class="mobile-author-stat-label">分类</span>
+      </div>
+      <div class="mobile-author-stat">
+        <span class="mobile-author-stat-num"><%= site.tags.length %></span>
+        <span class="mobile-author-stat-label">标签</span>
+      </div>
+    </div>
+  </div>
+
   <div class="post-nav-card glass-card">
     <% if (page.prev) { %>
       <a class="nav-item" href="<%= url_for(page.prev.path) %>">

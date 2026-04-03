@@ -30,7 +30,21 @@
     }
   </style>
 </head>
-<body>
+<%
+  var pageClass = 'page-generic';
+  if (is_home()) {
+    pageClass = 'page-home';
+  } else if (is_post()) {
+    pageClass = 'page-post';
+  } else if (is_archive()) {
+    pageClass = 'page-archive';
+  } else if (is_tag() || page.type === 'tags') {
+    pageClass = 'page-tag';
+  } else if (is_category() || page.type === 'categories') {
+    pageClass = 'page-category';
+  }
+%>
+<body class="<%= pageClass %>">
   <div class="global-background-overlay">
     <div class="holographic-grid"></div>
   </div>
