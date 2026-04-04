@@ -224,7 +224,7 @@
                     <a class="search-suggestion-item" href="<%= post.url %>">
                       <% if (post.cover) { %>
                         <span class="search-suggestion-cover">
-                          <img src="<%= post.cover %>" alt="<%= post.title %>" />
+                          <img src="<%= post.cover %>" alt="<%= post.title %>" loading="lazy" decoding="async" />
                         </span>
                       <% } %>
                       <span class="search-suggestion-main">

@@ -35,7 +35,7 @@
     <% site.posts.sort('date', -1).limit(5).forEach(function(post){ %>
       <li class="recent-item">
         <a class="recent-cover" href="<%= url_for(post.path) %>">
-          <img src="<%= post.cover || theme.default_cover %>" alt="<%= post.title %>" />
+          <img src="<%= post.cover || theme.default_cover %>" alt="<%= post.title %>" loading="lazy" decoding="async" />
         </a>
         <div class="recent-info">
           <a class="recent-title" href="<%= url_for(post.path) %>" title="<%= post.title %>"><%= post.title %></a>

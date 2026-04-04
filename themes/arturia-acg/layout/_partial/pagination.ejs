@@ -1,0 +1,73 @@
+<% if (page && page.total && page.total > 1) { %>
+  <%
+    var currentPage = page.current || 1;
+    var totalPages = page.total || 1;
+    var startPage = Math.max(1, currentPage - 2);
+    var endPage = Math.min(totalPages, currentPage + 2);
+
+    if (endPage - startPage < 4) {
+      if (startPage === 1) {
+        endPage = Math.min(totalPages, startPage + 4);
+      } else if (endPage === totalPages) {
+        startPage = Math.max(1, endPage - 4);
+      }
+    }
+
+    function pageUrl(pageNumber) {
+      if (pageNumber <= 1) return url_for(page.base || '/');
+      return url_for((page.base || '/') + config.pagination_dir + '/' + pageNumber + '/');
+    }
+  %>
+  <nav class="pagination-shell" aria-label="Pagination">
+    <div class="pagination-nav">
+      <% if (page.prev) { %>
+        <a class="pagination-link pagination-link-edge" href="<%= pageUrl(page.prev) %>" rel="prev">
+          <span class="pagination-arrow">&lsaquo;</span>
+          <span>上一页</span>
+        </a>
+      <% } else { %>
+        <span class="pagination-link pagination-link-edge is-disabled" aria-disabled="true">
+          <span class="pagination-arrow">&lsaquo;</span>
+          <span>上一页</span>
+        </span>
+      <% } %>
+
+      <div class="pagination-numbers">
+        <% if (startPage > 1) { %>
+          <a class="pagination-link pagination-link-number" href="<%= pageUrl(1) %>">1</a>
+          <% if (startPage > 2) { %>
+            <span class="pagination-ellipsis">...</span>
+          <% } %>
+        <% } %>
+
+        <% for (var i = startPage; i <= endPage; i++) { %>
+          <% if (i === currentPage) { %>
+            <span class="pagination-link pagination-link-number is-current" aria-current="page"><%= i %></span>
+          <% } else { %>
+            <a class="pagination-link pagination-link-number" href="<%= pageUrl(i) %>"><%= i %></a>
+          <% } %>
+        <% } %>
+
+        <% if (endPage < totalPages) { %>
+          <% if (endPage < totalPages - 1) { %>
+            <span class="pagination-ellipsis">...</span>
+          <% } %>
+          <a class="pagination-link pagination-link-number" href="<%= pageUrl(totalPages) %>"><%= totalPages %></a>
+        <% } %>
+      </div>
+
+      <% if (page.next) { %>
+        <a class="pagination-link pagination-link-edge" href="<%= pageUrl(page.next) %>" rel="next">
+          <span>下一页</span>
+          <span class="pagination-arrow">&rsaquo;</span>
+        </a>
+      <% } else { %>
+        <span class="pagination-link pagination-link-edge is-disabled" aria-disabled="true">
+          <span>下一页</span>
+          <span class="pagination-arrow">&rsaquo;</span>
+        </span>
+      <% } %>
+    </div>
+    <p class="pagination-status">第 <%= currentPage %> 页 / 共 <%= totalPages %> 页</p>
+  </nav>
+<% } %>
