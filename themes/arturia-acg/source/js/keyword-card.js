@@ -29,9 +29,11 @@ document.addEventListener('DOMContentLoaded', () => {
   if (glossary.size === 0) return;
 
   const isSkippableNode = (node) => {
-    const tag = node.parentElement && node.parentElement.tagName;
-    if (!tag) return true;
-    return ['SCRIPT', 'STYLE', 'CODE', 'PRE', 'A', 'KBD', 'SAMP', 'TEXTAREA'].includes(tag);
+    const parent = node.parentElement;
+    if (!parent) return true;
+
+    // Keep inline <code> markers renderable, but continue skipping fenced/code-block content.
+    return Boolean(parent.closest('script, style, pre, a, kbd, samp, textarea'));
   };
 
   const markerRegex = /\[\[([^\[\]]+?)\]\]/g;
@@ -67,6 +69,9 @@ document.addEventListener('DOMContentLoaded', () => {
       if (glossary.has(rawTerm)) {
         const termNode = document.createElement('span');
         termNode.className = 'keyword-term';
+        if (textNode.parentElement && textNode.parentElement.tagName === 'CODE') {
+          termNode.classList.add('keyword-term-inline-code');
+        }
         termNode.setAttribute('role', 'button');
         termNode.setAttribute('tabindex', '0');
         termNode.setAttribute('aria-haspopup', 'dialog');

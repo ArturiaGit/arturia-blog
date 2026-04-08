@@ -3072,6 +3072,17 @@ figure.highlight .class .title { color: #61afef; }
   outline: none;
 }
 
+.post-content code .keyword-term-inline-code {
+  font: inherit;
+  color: inherit;
+  border-bottom-color: currentColor;
+}
+
+.post-content code .keyword-term-inline-code:hover,
+.post-content code .keyword-term-inline-code:focus-visible {
+  color: #ffffff;
+}
+
 .keyword-hover-card {
   position: fixed;
   z-index: 1200;
