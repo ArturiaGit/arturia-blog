@@ -4,7 +4,7 @@ cover: /img/bg/exchange-cover.webp
 abbrlink: k8m2n9pq
 date: 2026-04-09 22:21:18
 categories:
-  - 后端架构
+  - RabbitMQ
 tags:
   - RabbitMQ
   - 消息队列

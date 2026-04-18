@@ -4,7 +4,7 @@ cover: /img/bg/permission-cover.webp
 abbrlink: p7r4m2k9
 date: 2026-04-18 14:51:23
 categories:
-  - 后端架构
+  - RabbitMQ
 tags:
   - RabbitMQ
   - 消息队列
