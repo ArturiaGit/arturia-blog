@@ -22,10 +22,22 @@
   </div>
 </div>
 
-<div class="sidebar-card tag-card">
-  <h3 class="sidebar-title">标签云</h3>
-  <div class="tag-cloud">
-    <%- tagcloud({min_font: 12, max_font: 18, amount: 20, color: false}) %>
+<%
+  var popularTagLimit = Number(theme.sidebar && theme.sidebar.popular_tags_limit) || 12;
+  var popularTags = site.tags.sort('length', -1).limit(popularTagLimit);
+%>
+<div class="sidebar-card tag-card popular-tags-card">
+  <div class="sidebar-card-heading">
+    <h3 class="sidebar-title">热门标签</h3>
+    <a class="sidebar-card-more" href="<%- url_for('/tags/') %>">全部</a>
+  </div>
+  <div class="popular-tag-list" aria-label="热门标签">
+    <% popularTags.forEach(function(tag){ %>
+      <a class="popular-tag-item" href="<%- url_for(tag.path) %>" title="<%- tag.name %>：<%- tag.length %> 篇文章">
+        <span class="popular-tag-name"><i class="fas fa-hashtag"></i><%- tag.name %></span>
+        <span class="popular-tag-count"><%- tag.length %></span>
+      </a>
+    <% }) %>
   </div>
 </div>
 

@@ -30,3 +30,4 @@ sidebar:
   avatar: /img/arturia-avatar.jpg
   author: Arturia
   description: "万物皆有其声，我亦是如此。"
+  popular_tags_limit: 5
