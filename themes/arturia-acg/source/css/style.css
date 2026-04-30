@@ -263,13 +263,14 @@ a {
 }
 
 .content-area {
-  flex: 0 0 75%;
+  flex: 1 1 0%;
+  min-width: 0;
 }
 
 .sidebar-area {
   position: relative;
   z-index: 10;
-  flex: 0 0 25%;
+  flex: 0 0 280px;
 }
 
 .post-list {
