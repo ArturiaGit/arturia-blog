@@ -4,7 +4,7 @@ cover: /img/bg/litedb-cover.webp
 abbrlink: 1pyagj9c
 date: 2026-06-28 19:59:23
 categories:
-  - 技术实践
+  - .NET
 tags:
   - LiteDB
   - NoSQL
