@@ -495,13 +495,23 @@ COLLECTION_COUNT=0
 
 [[JsonSerializerContext]] 只负责 [[SystemTextJson]]，不会参与 [[LiteDB]] 的 [[BSON]] 映射。[[LiteDB]] 的 [[BsonMapper]] 仍会在运行时检查 `AppConfigModel` 的公共属性和构造函数；如果共享泛型仓储没有向裁剪器声明这个要求，[[NativeAOT]] 可能移除映射所需元数据，最终导致实体没有被正常写入。
 
-同时，项目还误解了当前 [[LiteDB]] `6.0.0-prerelease.77` 的返回值。它的单实体实现等价于：
+同时，项目还误解了当前 [[LiteDB]] `6.0.0-prerelease.77` 的返回值。对该版本使用相同 `_id` 连续执行两次 `Upsert`，实测结果是：
+
+```text
+首次 Upsert（插入） = true
+同 ID Upsert（更新） = false
+更新后文档内容      = 新值
+```
+
+它的单实体实现等价于：
 
 ```csharp
 return Upsert(new[] { entity }) == 1;
 ```
 
-因此 `true` 表示恰好写入一条文档，`false` 表示没有完成单条写入，并不表示"本次执行了插入而不是更新"。旧逻辑把 `false` 当作插入成功，随后无条件显示成功 Toast，于是形成了完整的假成功链路：映射元数据被裁剪，`Upsert` 零写入并返回 `false`，客户端却把它解释为插入成功。
+关键在于批量 `Upsert` 的返回值统计插入数量，不统计更新数量。因此单实体重载返回 `true` 表示执行插入，返回 `false` 表示执行更新。这个布尔值描述的是操作类型，不能直接作为保存成功或失败的依据。
+
+旧代码把返回值命名为 `isUpdate`，实际语义正好相反；更重要的是，成功反馈没有以数据库读回结果为准。AOT 下 POCO 映射失败时，空数据库没有产生集合或文档，仅凭这个布尔值无法证明配置已经持久化，最终形成了界面提示与数据库状态不一致的"假成功"。
 
 ### ✦ 尝试过的缓解：声明裁剪契约（Attempted Mitigation: Declaring Trimming Contracts）
 
@@ -525,7 +535,21 @@ public interface IRepository<
 
 ### ✦ 保留的修复：写后读回（Retained Fix: Write-then-Read-Back Verification）
 
-`Upsert` 返回值的误判与发布方式无关，因此保存流程的正确性修复继续保留。[[DPAPI]] 加密完成后，客户端要求 `Upsert` 返回 `true`，再按固定配置 ID 读回文档，并以序号比较确认 ID 与刚写入的密文一致。任一步失败都返回失败并保持设置面板打开；只有写入和读回验证都成功，才显示"配置已保存"。
+`Upsert` 返回值的误判与发布方式无关，因此保存流程的正确性修复继续保留。[[DPAPI]] 加密完成后，客户端只用返回值区分本次执行的是插入还是更新；无论返回 `true` 还是 `false`，都继续按固定配置 ID 读回文档，并以序号比较确认 ID 与刚写入的密文一致。
+
+```csharp
+bool inserted = repository.Upsert(appConfig);
+AppConfigModel? persisted = repository.FindById(appConfig.Id);
+
+bool verified = persisted is not null &&
+                persisted.Id == appConfig.Id &&
+                string.Equals(
+                    persisted.AccessToken,
+                    appConfig.AccessToken,
+                    StringComparison.Ordinal);
+```
+
+`inserted` 只用于日志记录：`true` 记为插入，`false` 记为更新。异常、读回为空或内容不一致都返回失败并保持设置面板打开；只有写入调用完成且读回验证通过，才显示"配置已保存"。
 
 ArturiaLink 当前只用 [[LiteDB]] 保存很小的本地配置模型。最低限度仍要验证：
 
